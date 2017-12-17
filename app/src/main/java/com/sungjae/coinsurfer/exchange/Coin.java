@@ -26,4 +26,9 @@ public class Coin {
     public static Coin getInstance() {
         return mInstance;
     }
+
+
+    public float getMinTradeUnit(String coinCode) {
+        return mCoinMap.get(coinCode);
+    }
 }

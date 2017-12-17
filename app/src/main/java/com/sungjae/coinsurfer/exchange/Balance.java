@@ -1,24 +1,13 @@
 package com.sungjae.coinsurfer.exchange;
 
+import java.util.ArrayList;
+
 public class Balance {
-    private float mBitMoney;
-    private float mRealMoney;
 
-    public Balance(float bitMoney, float realMoney) {
-        mBitMoney = bitMoney;
-        mRealMoney = realMoney;
+
+    public ArrayList<Coin> getCoinBalance() {
+        return null;
     }
 
-    public float getBitAmount() {
-        return mBitMoney;
-    }
 
-    public float getRealMoney() {
-        return mRealMoney;
-    }
-
-    @Override
-    public String toString() {
-        return "mBitMoney = " + getBitAmount() + "\nmRealMoeny = " + getRealMoney();
-    }
 }

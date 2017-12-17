@@ -1,5 +1,13 @@
 @startuml
 
+
+Balance-right.>CoinFactory
+Balance-->Coin
+Balance..>Price
+CoinFactory-down.>Coin
+Coin-->Price
+
+
 class Balance {
     Coin[] mUseCoinList
     addUseCoin(String coinCode);
@@ -9,10 +17,15 @@ class Balance {
     getCoinToKrw(String coinCode);
 }
 
-Balance..>PriceList
-Balance-->CoinList
+class CoinFactory {
+    return Coin[];
+}
+
+
 
 Class Coin {
+    String mCode
+
     Price mSell
     Price mBuy
 
@@ -20,9 +33,10 @@ Class Coin {
     float getSellKrw()
 }
 
-class Price() {
-    float mCost
 
+
+class Price {
+    float mCost
     float getKrw(float coin)
     float getCoin(float krw)
 }
