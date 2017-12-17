@@ -1,0 +1,32 @@
+@startuml
+
+class Balance {
+    Coin[] mUseCoinList
+    addUseCoin(String coinCode);
+    setPriceTable(ArrayList<Price>price);
+    getKrw();
+    getCoinValue(String coinCode);
+    getCoinToKrw(String coinCode);
+}
+
+Balance..>PriceList
+Balance-->CoinList
+
+Class Coin {
+    Price mSell
+    Price mBuy
+
+    float getBuyKrw()
+    float getSellKrw()
+}
+
+class Price() {
+    float mCost
+
+    float getKrw(float coin)
+    float getCoin(float krw)
+}
+
+
+
+@enduml
