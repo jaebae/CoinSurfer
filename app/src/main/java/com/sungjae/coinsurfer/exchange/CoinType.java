@@ -7,13 +7,13 @@ public enum CoinType {
     BTC(0.001f),
     BCH(0.001f),
     ETH(0.01f),
+    QTUM(0.1f),
     DASH(0.01f),
     LTC(0.1f),
     ETC(0.1f),
     XRP(10.f),
     XMR(0.01f),
     ZEC(0.001f),
-    QTUM(0.1f),
     BTG(0.01f),
     EOS(1.0f);
 
