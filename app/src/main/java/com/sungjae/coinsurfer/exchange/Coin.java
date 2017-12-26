@@ -43,4 +43,16 @@ public class Coin {
     public String getCoinName() {
         return mCoinType.toString();
     }
+
+    public float getBuyCoin(float krw) {
+        return krw / mBuyPrice;
+    }
+
+    public float getSellCoin(float krw) {
+        return krw / mSellPrice;
+    }
+
+    public CoinType getCoinType() {
+        return mCoinType;
+    }
 }

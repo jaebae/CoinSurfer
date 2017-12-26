@@ -27,9 +27,10 @@ public class Balance {
         int index = getIndex(coin);
         if (index >= 0) {
             mCoinList.remove(index);
+            mCoinList.add(index, coin);
+        } else {
+            mCoinList.add(coin);
         }
-
-        mCoinList.add(coin);
     }
 
     private int getIndex(@NonNull Coin coin) {

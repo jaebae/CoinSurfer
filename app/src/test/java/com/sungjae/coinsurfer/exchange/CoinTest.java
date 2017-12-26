@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static com.sungjae.coinsurfer.exchange.CoinType.BTC;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -44,11 +45,18 @@ public class CoinTest {
     @Test
     public void getCoinNameShouldReturn() throws Exception {
         assertThat(mCoin.getCoinName(), is("BTC"));
+        assertThat(mCoin.getCoinType(), is(BTC));
     }
 
     @Test
-    public void shouldReturnMinTradeUnit() throws Exception {
-        //assertThat(mCoin.getMinTradeUnit("BTC"), is(0.001f));
+    public void getBuyKrwTest() throws Exception {
+        mCoin.setBuyPrice(10.f);
+        assertThat(mCoin.getBuyCoin(10.f), is(1.f));
+        assertThat(mCoin.getBuyCoin(100.f), is(10.f));
+
+        mCoin.setSellPrice(5.f);
+        assertThat(mCoin.getSellCoin(10.f), is(2.f));
+        assertThat(mCoin.getSellCoin(100.f), is(20.f));
     }
 
 }

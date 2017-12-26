@@ -35,14 +35,35 @@ public class TradeModelTest {
         mTradeModel.setKrwRate(0.2f);
         mTradeModel.setTriggerRate(2.f);
 
-        ArrayList<TradeInfo> mTradeInfoList = mTradeModel.getTradeInfoList();
-        assertThat(mTradeInfoList.size(), is(4));
-        for (int i = 0; i < mTradeInfoList.size(); i++) {
-            TradeInfo tradeInfo = mTradeInfoList.get(i);
+        ArrayList<TradeInfo> tradeInfoList = mTradeModel.getTradeInfoList();
+        assertThat(tradeInfoList.size(), is(4));
+        for (int i = 0; i < tradeInfoList.size(); i++) {
+            TradeInfo tradeInfo = tradeInfoList.get(i);
             assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(i).toString()));
             assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-            assertThat(tradeInfo.getTradeAmount(), is(25.f));
+            assertThat(tradeInfo.getTradeAmount(), is(40.f));
         }
+
+
+        for (int i = 0; i < 4; i++) {
+            Coin coin = balance.getCoin(i);
+            coin.setCoinValue(40.f);
+            balance.updateCoin(coin);
+        }
+        balance.setKrw(4000.f);
+
+        Coin coin = createCoin(0, 95.f, 95.f);
+        coin.setCoinValue(40.f);
+        balance.updateCoin(coin);
+
+        tradeInfoList = mTradeModel.getTradeInfoList();
+
+        TradeInfo tradeInfo = tradeInfoList.get(0);
+        assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(0).toString()));
+        assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
+        assertThat(tradeInfo.getTradeAmount(), is(1.684f));
+
+
     }
 
     @NonNull
@@ -50,6 +71,7 @@ public class TradeModelTest {
         Coin coin = new Coin(coinType);
         coin.setBuyPrice(buyPrice);
         coin.setSellPrice(sellPrice);
+        coin.setCurPrice((buyPrice + sellPrice) / 2);
         return coin;
     }
 }
