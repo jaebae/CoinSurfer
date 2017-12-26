@@ -10,23 +10,40 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoinTest {
-
     private Coin mCoin;
 
     @Before
     public void setUp() throws Exception {
-        mCoin = Coin.getInstance();
-
+        mCoin = new Coin(0);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionNotSupportCoin() throws Exception {
-        mCoin.getMinTradeUnit("TEST");
+    @Test
+    public void krwShouldBeReturn() throws Exception {
+        mCoin.setSellPrice(1.f);
+        mCoin.setCoinValue(1.f);
+        assertThat(mCoin.getSellKrw(), is(1.f));
+
+        mCoin.setCoinValue(2.f);
+        assertThat(mCoin.getSellKrw(), is(2.f));
+
+
+        mCoin.setBuyPrice(2.f);
+        mCoin.setCoinValue(2.f);
+        assertThat(mCoin.getBuyKrw(), is(4.f));
+
+        mCoin.setBuyPrice(0.5f);
+        mCoin.setCoinValue(2.f);
+        assertThat(mCoin.getBuyKrw(), is(1.f));
+    }
+
+    @Test
+    public void getCoinNameShouldReturn() throws Exception {
+        assertThat(mCoin.getCoinName(), is("BTC"));
     }
 
     @Test
     public void shouldReturnMinTradeUnit() throws Exception {
-        assertThat(mCoin.getMinTradeUnit("BTC"), is(0.001f));
+        //assertThat(mCoin.getMinTradeUnit("BTC"), is(0.001f));
     }
 
 }

@@ -24,13 +24,19 @@ class CoinFactory {
 
 
 Class Coin {
-    String mCode
+    CoinType mCoinType
 
-    Price mSell
-    Price mBuy
+    float mSellPrice
+    float mBuyPrice
+
+    void setCoinValue(float coinValue)
+    void setBuyPrice(float buyPrice)
+    void setSellPrice(float sellPrice)
 
     float getBuyKrw()
     float getSellKrw()
+
+    String getCoinName()
 }
 
 
