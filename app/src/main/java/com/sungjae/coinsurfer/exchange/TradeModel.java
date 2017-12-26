@@ -40,21 +40,12 @@ public class TradeModel {
 
         for (int i = 0; i < mBalance.getCoinCount(); i++) {
             Coin coin = mBalance.getCoin(i);
-            TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
+
+            TradeInfo tradeInfo;
             if (targetCoin > coin.getCurKrw()) {
-                float diff = targetCoin - coin.getBuyKrw();
-                float rate = (diff / targetCoin) * 100.f;
-                if (rate > mTriggerRate) {
-                    tradeInfo.setTradeType(BUY);
-                    tradeInfo.setTradeAmount(coin.getBuyCoin(diff));
-                }
+                tradeInfo = createBuyTradeInfo(coin, targetCoin);
             } else {
-                float diff = coin.getSellKrw() - targetCoin;
-                float rate = (diff / targetCoin) * 100.f;
-                if (rate > mTriggerRate) {
-                    tradeInfo.setTradeType(SELL);
-                    tradeInfo.setTradeAmount(coin.getSellCoin(diff));
-                }
+                tradeInfo = createSellTradeInfo(coin, targetCoin);
             }
 
             if (tradeInfo.getTradeType() != HOLD) {
@@ -64,4 +55,29 @@ public class TradeModel {
 
         return tradeInfoList;
     }
+
+    private TradeInfo createBuyTradeInfo(Coin coin, float targetCoin) {
+        float diff = targetCoin - coin.getBuyKrw();
+        float rate = (diff / targetCoin) * 100.f;
+
+        TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
+
+        if (rate > mTriggerRate) {
+            tradeInfo.setTradeType(BUY);
+            tradeInfo.setTradeAmount(coin.getBuyCoin(diff));
+        }
+        return tradeInfo;
+    }
+
+    private TradeInfo createSellTradeInfo(Coin coin, float targetCoin) {
+        float diff = coin.getSellKrw() - targetCoin;
+        float rate = (diff / targetCoin) * 100.f;
+        TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
+        if (rate > mTriggerRate) {
+            tradeInfo.setTradeType(SELL);
+            tradeInfo.setTradeAmount(coin.getSellCoin(diff));
+        }
+        return tradeInfo;
+    }
+
 }

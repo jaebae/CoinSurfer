@@ -40,7 +40,7 @@ public class CoinTypeTest {
 
     @Test
     public void getCoinTypeTest() throws Exception {
-        CoinType typeList[] = {BTC, BCH, ETH, DASH, LTC, ETC, XRP, XMR, ZEC, QTUM, BTG, EOS};
+        CoinType typeList[] = {BTC, BCH, ETH, QTUM, DASH, LTC, ETC, XRP, XMR, ZEC, BTG, EOS};
 
         int i = 0;
 
