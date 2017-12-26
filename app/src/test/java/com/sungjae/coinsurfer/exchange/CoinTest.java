@@ -34,6 +34,11 @@ public class CoinTest {
         mCoin.setBuyPrice(0.5f);
         mCoin.setCoinValue(2.f);
         assertThat(mCoin.getBuyKrw(), is(1.f));
+
+        mCoin.setCoinValue(1.f);
+        mCoin.setCurPrice(0.2f);
+        assertThat(mCoin.getCurKrw(), is(0.2f));
+
     }
 
     @Test

@@ -4,8 +4,9 @@ package com.sungjae.coinsurfer.exchange;
 public class Coin {
     private CoinType mCoinType;
     private float mCoinValue;
-    private float mBuyPrice;
-    private float mSellPrice;
+    private float mBuyPrice;  /*구매가*/
+    private float mSellPrice; /*판매가*/
+    private float mCurPrice; /*마지막 거래가*/
 
     public Coin(int coinType) {
         mCoinType = CoinType.getCoinType(coinType);
@@ -23,12 +24,20 @@ public class Coin {
         mSellPrice = sellPrice;
     }
 
+    public void setCurPrice(float curPrice) {
+        mCurPrice = curPrice;
+    }
+
     public float getBuyKrw() {
         return mCoinValue * mBuyPrice;
     }
 
     public float getSellKrw() {
         return mCoinValue * mSellPrice;
+    }
+
+    public float getCurKrw() {
+        return mCoinValue * mCurPrice;
     }
 
     public String getCoinName() {

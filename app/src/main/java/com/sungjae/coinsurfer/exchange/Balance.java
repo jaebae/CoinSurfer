@@ -5,25 +5,36 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 
 public class Balance {
-    ArrayList<Coin> mCoin = new ArrayList<>();
-    float mKrw;
+    private ArrayList<Coin> mCoinList = new ArrayList<>();
+    private float mKrw;
 
     public Balance() {
 
     }
 
+    public float getTotalAsKrw() {
+        float ret = mKrw;
+
+        for (Coin coin : mCoinList) {
+            ret += coin.getCurKrw();
+        }
+
+        return ret;
+    }
+
+
     public void updateCoin(@NonNull Coin coin) {
         int index = getIndex(coin);
         if (index >= 0) {
-            mCoin.remove(index);
+            mCoinList.remove(index);
         }
 
-        mCoin.add(coin);
+        mCoinList.add(coin);
     }
 
     private int getIndex(@NonNull Coin coin) {
-        for (int i = 0; i < mCoin.size(); i++) {
-            Coin pre = mCoin.get(i);
+        for (int i = 0; i < mCoinList.size(); i++) {
+            Coin pre = mCoinList.get(i);
             if (pre.getCoinName().equals(coin.getCoinName())) {
                 return i;
             }
@@ -32,10 +43,18 @@ public class Balance {
     }
 
     public int getCoinCount() {
-        return mCoin.size();
+        return mCoinList.size();
     }
 
     public Coin getCoin(int index) {
-        return mCoin.get(index);
+        return mCoinList.get(index);
+    }
+
+    public float getKrw() {
+        return mKrw;
+    }
+
+    public void setKrw(float krw) {
+        mKrw = krw;
     }
 }
