@@ -1,11 +1,11 @@
-package com.sungjae.coinsurfer.exchange;
+package com.sungjae.coinsurfer.tradedata;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.sungjae.coinsurfer.exchange.CoinType.BTC;
+import static com.sungjae.coinsurfer.tradedata.CoinType.BTC;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

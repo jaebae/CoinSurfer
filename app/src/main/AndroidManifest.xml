@@ -9,13 +9,17 @@
         android:roundIcon="@drawable/coin_wave_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".service.TradeService">
+            <intent-filter>
+                <action android:name="TradeService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

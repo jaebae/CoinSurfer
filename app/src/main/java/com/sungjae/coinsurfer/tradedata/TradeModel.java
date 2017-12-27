@@ -1,11 +1,7 @@
-package com.sungjae.coinsurfer.exchange;
+package com.sungjae.coinsurfer.tradedata;
 
 
 import java.util.ArrayList;
-
-import static com.sungjae.coinsurfer.exchange.TradeInfo.TradeType.BUY;
-import static com.sungjae.coinsurfer.exchange.TradeInfo.TradeType.HOLD;
-import static com.sungjae.coinsurfer.exchange.TradeInfo.TradeType.SELL;
 
 public class TradeModel {
     float mKrwRate;
@@ -48,7 +44,7 @@ public class TradeModel {
                 tradeInfo = createSellTradeInfo(coin, targetCoin);
             }
 
-            if (tradeInfo.getTradeType() != HOLD) {
+            if (tradeInfo.getTradeType() != TradeInfo.TradeType.HOLD) {
                 tradeInfoList.add(tradeInfo);
             }
         }
@@ -63,7 +59,7 @@ public class TradeModel {
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
 
         if (rate > mTriggerRate) {
-            tradeInfo.setTradeType(BUY);
+            tradeInfo.setTradeType(TradeInfo.TradeType.BUY);
             tradeInfo.setTradeAmount(coin.getBuyCoin(diff));
         }
         return tradeInfo;
@@ -74,7 +70,7 @@ public class TradeModel {
         float rate = (diff / targetCoin) * 100.f;
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
         if (rate > mTriggerRate) {
-            tradeInfo.setTradeType(SELL);
+            tradeInfo.setTradeType(TradeInfo.TradeType.SELL);
             tradeInfo.setTradeAmount(coin.getSellCoin(diff));
         }
         return tradeInfo;

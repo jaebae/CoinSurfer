@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Support Coin">
+    <PreferenceCategory android:title="Invest Info">
         <EditTextPreference
             android:defaultValue="0.8"
             android:editable="true"
@@ -13,53 +13,65 @@
             android:inputType="numberDecimal"
             android:key="krw_rate"
             android:title="KRW rate" />
+        <EditTextPreference
+            android:defaultValue="1000000"
+            android:editable="true"
+            android:inputType="numberDecimal"
+            android:key="invest_krw"
+            android:title="Invest KRW" />
+        <EditTextPreference
+            android:defaultValue="30"
+            android:editable="true"
+            android:inputType="numberDecimal"
+            android:key="polling_time"
+            android:title="POLLING INTERVAL" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Support Coin">
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_0"
             android:title="BTC" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_1"
             android:title="BCH" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_2"
             android:title="ETH" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_3"
             android:title="QTUM" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_4"
             android:title="DASH" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_5"
             android:title="LTC" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_6"
             android:title="ETC" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_7"
             android:title="XRP" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_8"
             android:title="XMR" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_9"
             android:title="ZEC" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_10"
             android:title="BTG" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="coin_11"
             android:title="EOS" />
@@ -75,13 +87,5 @@
             android:inputType="textPassword"
             android:key="secret_key"
             android:title="Secret Key" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Invest info">
-        <EditTextPreference
-            android:defaultValue="1000000"
-            android:editable="true"
-            android:inputType="numberDecimal"
-            android:key="total_invest"
-            android:title="Invest KRW" />
     </PreferenceCategory>
 </PreferenceScreen>

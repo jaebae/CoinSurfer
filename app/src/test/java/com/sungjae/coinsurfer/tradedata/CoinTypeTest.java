@@ -1,19 +1,19 @@
-package com.sungjae.coinsurfer.exchange;
+package com.sungjae.coinsurfer.tradedata;
 
 import org.junit.Test;
 
-import static com.sungjae.coinsurfer.exchange.CoinType.BCH;
-import static com.sungjae.coinsurfer.exchange.CoinType.BTC;
-import static com.sungjae.coinsurfer.exchange.CoinType.BTG;
-import static com.sungjae.coinsurfer.exchange.CoinType.DASH;
-import static com.sungjae.coinsurfer.exchange.CoinType.EOS;
-import static com.sungjae.coinsurfer.exchange.CoinType.ETC;
-import static com.sungjae.coinsurfer.exchange.CoinType.ETH;
-import static com.sungjae.coinsurfer.exchange.CoinType.LTC;
-import static com.sungjae.coinsurfer.exchange.CoinType.QTUM;
-import static com.sungjae.coinsurfer.exchange.CoinType.XMR;
-import static com.sungjae.coinsurfer.exchange.CoinType.XRP;
-import static com.sungjae.coinsurfer.exchange.CoinType.ZEC;
+import static com.sungjae.coinsurfer.tradedata.CoinType.BCH;
+import static com.sungjae.coinsurfer.tradedata.CoinType.BTC;
+import static com.sungjae.coinsurfer.tradedata.CoinType.BTG;
+import static com.sungjae.coinsurfer.tradedata.CoinType.DASH;
+import static com.sungjae.coinsurfer.tradedata.CoinType.EOS;
+import static com.sungjae.coinsurfer.tradedata.CoinType.ETC;
+import static com.sungjae.coinsurfer.tradedata.CoinType.ETH;
+import static com.sungjae.coinsurfer.tradedata.CoinType.LTC;
+import static com.sungjae.coinsurfer.tradedata.CoinType.QTUM;
+import static com.sungjae.coinsurfer.tradedata.CoinType.XMR;
+import static com.sungjae.coinsurfer.tradedata.CoinType.XRP;
+import static com.sungjae.coinsurfer.tradedata.CoinType.ZEC;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

@@ -1,7 +1,7 @@
-package com.sungjae.coinsurfer.exchange;
+package com.sungjae.coinsurfer.tradedata;
 
 
-import static com.sungjae.coinsurfer.exchange.TradeInfo.TradeType.HOLD;
+import static com.sungjae.coinsurfer.tradedata.TradeInfo.TradeType.HOLD;
 
 public class TradeInfo {
     CoinType mCoinType;
@@ -21,12 +21,12 @@ public class TradeInfo {
         return mTradeType;
     }
 
-    public float getTradeAmount() {
-        return mTradeAmount;
-    }
-
     public void setTradeType(TradeType tradeType) {
         mTradeType = tradeType;
+    }
+
+    public float getTradeAmount() {
+        return mTradeAmount;
     }
 
     public void setTradeAmount(float amount) {

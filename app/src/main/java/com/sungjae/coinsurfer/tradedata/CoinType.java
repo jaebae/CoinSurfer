@@ -1,4 +1,4 @@
-package com.sungjae.coinsurfer.exchange;
+package com.sungjae.coinsurfer.tradedata;
 
 
 import java.util.ArrayList;
