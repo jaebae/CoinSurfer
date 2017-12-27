@@ -41,7 +41,7 @@ public enum CoinType {
         return sCoinList.get(code);
     }
 
-    double getTradeUnit() {
+    public double getTradeUnit() {
         return mTradeUnit;
     }
 

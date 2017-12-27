@@ -3,7 +3,6 @@ package com.sungjae.coinsurfer.exchange.bithumb;
 import com.sungjae.coinsurfer.exchange.Exchange;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
-import com.sungjae.coinsurfer.tradedata.CoinType;
 import com.sungjae.coinsurfer.tradedata.TradeInfo;
 
 import org.json.simple.JSONArray;
@@ -11,7 +10,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -70,15 +68,12 @@ public class BithumbExchange implements Exchange {
             coin.setCoinValue(count);
             balance.updateCoin(coin);
         }
+
+        balance.setKrw(Double.parseDouble(getString("total_krw", dataPart)));
     }
 
     @Override
-    public ArrayList<TradeInfo> buy(CoinType coinType, double amount) throws Exception {
-        return null;
-    }
-
-    @Override
-    public ArrayList<TradeInfo> sell(CoinType coinType, double amount) throws Exception {
+    public TradeInfo trade(TradeInfo tradeInfo) throws Exception {
         return null;
     }
 
@@ -110,7 +105,7 @@ public class BithumbExchange implements Exchange {
         if (obj instanceof String) {
             value = (String) obj;
         } else if (obj instanceof Long) {
-            value = "" + (Long) obj;
+            value = "" + obj;
         } else if (obj instanceof Integer) {
             value = "" + obj;
         }

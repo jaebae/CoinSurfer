@@ -59,4 +59,21 @@ public class Coin {
     public CoinType getCoinType() {
         return mCoinType;
     }
+
+    public String makeAsTradeUnit(double value) {
+        if (mCoinType.getTradeUnit() == 0.1) {
+            return String.format("%.1f", value);
+        } else if (mCoinType.getTradeUnit() == 0.01) {
+            return String.format("%.2f", value);
+        } else if (mCoinType.getTradeUnit() == 0.001) {
+            return String.format("%.3f", value);
+        } else if (mCoinType.getTradeUnit() == 1) {
+            return String.format("%.0f", value);
+        } else if (mCoinType.getTradeUnit() == 10) {
+            String ret = String.format("%.0f", (value / 10));
+            return ret + "0";
+        }
+
+        return "";
+    }
 }

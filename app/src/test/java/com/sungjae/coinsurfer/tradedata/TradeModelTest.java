@@ -32,7 +32,6 @@ public class TradeModelTest {
 
         mTradeModel.setBalance(balance);
         mTradeModel.setCoinRate(0.8);
-        mTradeModel.setKrwRate(0.2);
         mTradeModel.setTriggerRate(2.);
 
         ArrayList<TradeInfo> tradeInfoList = mTradeModel.getTradeInfoList();
@@ -61,7 +60,7 @@ public class TradeModelTest {
         TradeInfo tradeInfo = tradeInfoList.get(0);
         assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(0).toString()));
         assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-        assertThat(tradeInfo.getTradeCoinAmount(), is(1.684));
+        assertThat(tradeInfo.getTradeCoinAmount(), is(1.6842105263157894));
 
 
     }

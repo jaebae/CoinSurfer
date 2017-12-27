@@ -4,7 +4,7 @@ package com.sungjae.coinsurfer.tradedata;
 import java.util.ArrayList;
 
 public class TradeModel {
-    double mKrwRate;
+
     double mCoinRate;
 
     double mTriggerRate;
@@ -19,9 +19,6 @@ public class TradeModel {
         mCoinRate = coinRate;
     }
 
-    public void setKrwRate(double krwRate) {
-        mKrwRate = krwRate;
-    }
 
     public void setTriggerRate(double triggerRate) {
         mTriggerRate = triggerRate;

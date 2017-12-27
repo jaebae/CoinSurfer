@@ -8,11 +8,11 @@
             android:key="coin_rate"
             android:title="Coin rate" />
         <EditTextPreference
-            android:defaultValue="0.2"
+            android:defaultValue="2"
             android:editable="true"
             android:inputType="numberDecimal"
-            android:key="krw_rate"
-            android:title="KRW rate" />
+            android:key="trigger_rate"
+            android:title="Trigger rate" />
         <EditTextPreference
             android:defaultValue="1000000"
             android:editable="true"

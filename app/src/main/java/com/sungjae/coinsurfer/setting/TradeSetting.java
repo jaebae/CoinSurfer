@@ -8,25 +8,25 @@ import com.sungjae.coinsurfer.tradedata.CoinType;
 
 import java.util.ArrayList;
 
-/**
- * Created by 배성재 on 2017-12-27.
- */
-
 public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static TradeSetting sTradeSettingInstance;
-    private Context mContext;
+
     private SharedPreferences mSharedPreferences;
-    private ArrayList<OnSettingChangeListener> mOnSettingChangeListener = new ArrayList<>();
     private double mCoinRate;
-    private double mKrwRate;
+    private double mTriggerRate;
     private double mInvestKrw;
     private String mConnectKey;
     private String mSecretKey;
     private ArrayList<CoinType> mEnableCoinList = new ArrayList<>();
     private long mPollingTime;
 
+    private ArrayList<OnSettingChangeListener> mOnSettingChangeListener = new ArrayList<>();
+
+    public interface OnSettingChangeListener {
+        void onSettingChange();
+    }
+
     private TradeSetting(Context context) {
-        mContext = context;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this); //it don't need to unregister
         updateValue();
@@ -96,7 +96,7 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
 
     private void updateInvestInfo() {
         mCoinRate = getDoubleValue("coin_rate", 0.8);
-        mKrwRate = getDoubleValue("krw_rate", 0.2);
+        mTriggerRate = getDoubleValue("trigger_rate", 2);
 
         mInvestKrw = getDoubleValue("invest_krw", 1000000f);
 
@@ -121,7 +121,11 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
         return mSecretKey;
     }
 
-    public interface OnSettingChangeListener {
-        void onSettingChange();
+    public double getCoinRate() {
+        return mCoinRate;
+    }
+
+    public double getTriggerRate() {
+        return mTriggerRate;
     }
 }

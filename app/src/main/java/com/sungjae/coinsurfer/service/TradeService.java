@@ -18,6 +18,8 @@ import com.sungjae.coinsurfer.setting.TradeSetting;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
 import com.sungjae.coinsurfer.tradedata.CoinType;
+import com.sungjae.coinsurfer.tradedata.TradeInfo;
+import com.sungjae.coinsurfer.tradedata.TradeModel;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,9 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
     private Exchange mExchange;
     private Balance mBalance;
+    private TradeModel mTradeModel;
+
+    private Object SETTING_LOCK = new Object();
 
     @Override
     public void onCreate() {
@@ -36,17 +41,13 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         mTradeSetting.addOnChangedListener(this); // it don't need to unregister
 
         mExchange = ExchangeFactory.createBithumbExchange();
-        mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
-
         mBalance = new Balance();
-        initBalanceCoin();
+        mTradeModel = new TradeModel();
+        mTradeModel.setBalance(mBalance);
 
-        getHandler();
-    }
+        applySettingValue();
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        createHandler();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
     }
 
     @NonNull
-    private Handler getHandler() {
+    private Handler createHandler() {
         mHandler = new Handler(getLooperHandlerThread()) {
             @Override
             public void handleMessage(Message msg) {
@@ -71,8 +72,14 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
     private void doTradeLogic() {
         try {
-            mExchange.getMarketPrice(mBalance);
-            mExchange.getBalance(mBalance);
+            synchronized (SETTING_LOCK) {
+                mExchange.getMarketPrice(mBalance);
+                mExchange.getBalance(mBalance);
+                ArrayList<TradeInfo> tradeList = mTradeModel.getTradeInfoList();
+                for (TradeInfo tradeInfo : tradeList) {
+                    mExchange.trade(tradeInfo);
+                }
+            }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -95,15 +102,21 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
     @Override
     public void onSettingChange() {
-        mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
-        initBalanceCoin();
+        applySettingValue();
     }
 
-    private void initBalanceCoin() {
-        mBalance.clearCoinInfo();
-        ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
-        for (CoinType coinType : coinTypeList) {
-            mBalance.updateCoin(new Coin(coinType));
+    private void applySettingValue() {
+        synchronized (SETTING_LOCK) {
+            mBalance.clearCoinInfo();
+            ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
+            for (CoinType coinType : coinTypeList) {
+                mBalance.updateCoin(new Coin(coinType));
+            }
+
+            mTradeModel.setCoinRate(mTradeSetting.getCoinRate());
+            mTradeModel.setTriggerRate(mTradeSetting.getTriggerRate());
+
+            mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
         }
     }
 }
