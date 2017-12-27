@@ -35,7 +35,7 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         mTradeSetting = TradeSetting.getInstance(getApplicationContext());
         mTradeSetting.addOnChangedListener(this); // it don't need to unregister
 
-        mExchange = ExchangeFactory.createBithumbExchange(mTradeSetting);
+        mExchange = ExchangeFactory.createBithumbExchange();
         mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
 
         mBalance = new Balance();

@@ -1,7 +1,6 @@
 package com.sungjae.coinsurfer.exchange.bithumb;
 
 import com.sungjae.coinsurfer.exchange.Exchange;
-import com.sungjae.coinsurfer.setting.TradeSetting;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
 import com.sungjae.coinsurfer.tradedata.CoinType;
@@ -20,11 +19,9 @@ import java.util.HashMap;
  */
 
 public class BithumbExchange implements Exchange {
-    private TradeSetting mTradeSetting;
     private Api_Client mApi = new Api_Client();
 
-    public BithumbExchange(TradeSetting tradeSetting) {
-        mTradeSetting = tradeSetting;
+    public BithumbExchange() {
     }
 
     @Override
@@ -34,10 +31,7 @@ public class BithumbExchange implements Exchange {
 
     @Override
     public void getMarketPrice(Balance balance) throws Exception {
-        ArrayList<Coin> ret = new ArrayList<>();
-
         String response = callApi("/public/ticker/ALL", null, null);
-        ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
 
         JSONObject jsonResult = (JSONObject) new JSONParser().parse(response);
         JSONObject dataPart = (JSONObject) jsonResult.get("data");
