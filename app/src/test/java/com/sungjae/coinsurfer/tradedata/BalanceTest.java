@@ -24,8 +24,8 @@ public class BalanceTest {
 
     @Test
     public void setKrwTest() throws Exception {
-        mBalance.setKrw(100.f);
-        assertThat(mBalance.getKrw(), is(100.f));
+        mBalance.setKrw(100.);
+        assertThat(mBalance.getKrw(), is(100.));
     }
 
     @Test
@@ -58,25 +58,25 @@ public class BalanceTest {
 
     @Test
     public void getTotalAsKrwTest() throws Exception {
-        assertThat(mBalance.getTotalAsKrw(), is(0.f));
+        assertThat(mBalance.getTotalAsKrw(), is(0.));
 
         mBalance.setKrw(10.f);
-        assertThat(mBalance.getTotalAsKrw(), is(10.f));
+        assertThat(mBalance.getTotalAsKrw(), is(10.));
 
         Coin coin = createCoin("BTC");
         mBalance.updateCoin(coin);
-        assertThat(mBalance.getTotalAsKrw(), is(11.f));
+        assertThat(mBalance.getTotalAsKrw(), is(11.));
 
         coin = createCoin("BCH");
         mBalance.updateCoin(coin);
-        assertThat(mBalance.getTotalAsKrw(), is(12.f));
+        assertThat(mBalance.getTotalAsKrw(), is(12.));
     }
 
     @NonNull
     private Coin createCoin(String coinName) {
         Coin coin = mock(Coin.class);
         when(coin.getCoinName()).thenReturn(coinName);
-        when(coin.getCurKrw()).thenReturn(1.f);
+        when(coin.getCurKrw()).thenReturn(1.);
         return coin;
     }
 }

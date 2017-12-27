@@ -4,10 +4,10 @@ package com.sungjae.coinsurfer.tradedata;
 import java.util.ArrayList;
 
 public class TradeModel {
-    float mKrwRate;
-    float mCoinRate;
+    double mKrwRate;
+    double mCoinRate;
 
-    float mTriggerRate;
+    double mTriggerRate;
 
     Balance mBalance;
 
@@ -15,24 +15,24 @@ public class TradeModel {
         mBalance = balance;
     }
 
-    public void setCoinRate(float coinRate) {
+    public void setCoinRate(double coinRate) {
         mCoinRate = coinRate;
     }
 
-    public void setKrwRate(float krwRate) {
+    public void setKrwRate(double krwRate) {
         mKrwRate = krwRate;
     }
 
-    public void setTriggerRate(float triggerRate) {
+    public void setTriggerRate(double triggerRate) {
         mTriggerRate = triggerRate;
     }
 
     public ArrayList<TradeInfo> getTradeInfoList() {
         ArrayList<TradeInfo> tradeInfoList = new ArrayList<>();
 
-        float totalAsKrw = mBalance.getTotalAsKrw();
+        double totalAsKrw = mBalance.getTotalAsKrw();
 
-        float targetCoin = (totalAsKrw * mCoinRate) / mBalance.getCoinCount();
+        double targetCoin = (totalAsKrw * mCoinRate) / mBalance.getCoinCount();
 
         for (int i = 0; i < mBalance.getCoinCount(); i++) {
             Coin coin = mBalance.getCoin(i);
@@ -52,26 +52,26 @@ public class TradeModel {
         return tradeInfoList;
     }
 
-    private TradeInfo createBuyTradeInfo(Coin coin, float targetCoin) {
-        float diff = targetCoin - coin.getBuyKrw();
-        float rate = (diff / targetCoin) * 100.f;
+    private TradeInfo createBuyTradeInfo(Coin coin, double targetCoin) {
+        double diff = targetCoin - coin.getBuyKrw();
+        double rate = (diff / targetCoin) * 100.f;
 
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
 
         if (rate > mTriggerRate) {
             tradeInfo.setTradeType(TradeInfo.TradeType.BUY);
-            tradeInfo.setTradeAmount(coin.getBuyCoin(diff));
+            tradeInfo.setTradeCoinAmount(coin.getBuyCoin(diff));
         }
         return tradeInfo;
     }
 
-    private TradeInfo createSellTradeInfo(Coin coin, float targetCoin) {
-        float diff = coin.getSellKrw() - targetCoin;
-        float rate = (diff / targetCoin) * 100.f;
+    private TradeInfo createSellTradeInfo(Coin coin, double targetCoin) {
+        double diff = coin.getSellKrw() - targetCoin;
+        double rate = (diff / targetCoin) * 100.f;
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
         if (rate > mTriggerRate) {
             tradeInfo.setTradeType(TradeInfo.TradeType.SELL);
-            tradeInfo.setTradeAmount(coin.getSellCoin(diff));
+            tradeInfo.setTradeCoinAmount(coin.getSellCoin(diff));
         }
         return tradeInfo;
     }

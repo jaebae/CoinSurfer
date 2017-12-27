@@ -10,19 +10,37 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
+import com.sungjae.coinsurfer.exchange.Exchange;
+import com.sungjae.coinsurfer.exchange.ExchangeFactory;
 import com.sungjae.coinsurfer.setting.TradeSetting;
+import com.sungjae.coinsurfer.tradedata.Balance;
+import com.sungjae.coinsurfer.tradedata.Coin;
+import com.sungjae.coinsurfer.tradedata.CoinType;
+
+import java.util.ArrayList;
 
 public class TradeService extends Service implements TradeSetting.OnSettingChangeListener {
 
     private Handler mHandler;
     private TradeSetting mTradeSetting;
 
+    private Exchange mExchange;
+    private Balance mBalance;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mTradeSetting = TradeSetting.getInstance(getApplicationContext());
         mTradeSetting.addOnChangedListener(this); // it don't need to unregister
+
+        mExchange = ExchangeFactory.createBithumbExchange(mTradeSetting);
+        mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
+
+        mBalance = new Balance();
+        initBalanceCoin();
+
         getHandler();
     }
 
@@ -52,6 +70,12 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
     }
 
     private void doTradeLogic() {
+        try {
+            mExchange.getMarketPrice(mBalance);
+            mExchange.getBalance(mBalance);
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -71,6 +95,15 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
     @Override
     public void onSettingChange() {
+        mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
+        initBalanceCoin();
+    }
 
+    private void initBalanceCoin() {
+        mBalance.clearCoinInfo();
+        ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
+        for (CoinType coinType : coinTypeList) {
+            mBalance.updateCoin(new Coin(coinType));
+        }
     }
 }

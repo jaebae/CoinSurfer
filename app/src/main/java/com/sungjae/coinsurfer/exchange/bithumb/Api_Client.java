@@ -19,12 +19,10 @@ public class Api_Client {
     private static final String DEFAULT_ENCODING = "UTF-8";
     private static final String HMAC_SHA512 = "HmacSHA512";
     protected String api_url = "https://api.bithumb.com";
-    protected String api_key;
-    protected String api_secret;
+    protected String api_key = "";
+    protected String api_secret = "";
 
-    public Api_Client(String api_key, String api_secret) {
-        this.api_key = api_key;
-        this.api_secret = api_secret;
+    public Api_Client() {
     }
 
     public static String encodeURIComponent(String s) {
@@ -68,6 +66,11 @@ public class Api_Client {
 
     public static String asHex(byte[] bytes) {
         return new String(Base64.encodeBase64(bytes));
+    }
+
+    public void setApiKey(String api_key, String api_secret) {
+        this.api_key = api_key;
+        this.api_secret = api_secret;
     }
 
     /**

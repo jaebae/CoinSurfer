@@ -3,40 +3,44 @@ package com.sungjae.coinsurfer.tradedata;
 
 public class Coin {
     private CoinType mCoinType;
-    private float mCoinValue;
-    private float mBuyPrice;  /*구매가*/
-    private float mSellPrice; /*판매가*/
-    private float mCurPrice; /*마지막 거래가*/
+    private double mCoinValue;
+    private double mBuyPrice;  /*구매가*/
+    private double mSellPrice; /*판매가*/
+    private double mCurPrice; /*마지막 거래가*/
 
     public Coin(int coinType) {
         mCoinType = CoinType.getCoinType(coinType);
     }
 
-    public void setCoinValue(float coinValue) {
+    public Coin(CoinType coinType) {
+        mCoinType = coinType;
+    }
+
+    public void setCoinValue(double coinValue) {
         mCoinValue = coinValue;
     }
 
-    public void setBuyPrice(float buyPrice) {
+    public void setBuyPrice(double buyPrice) {
         mBuyPrice = buyPrice;
     }
 
-    public void setSellPrice(float sellPrice) {
+    public void setSellPrice(double sellPrice) {
         mSellPrice = sellPrice;
     }
 
-    public void setCurPrice(float curPrice) {
+    public void setCurPrice(double curPrice) {
         mCurPrice = curPrice;
     }
 
-    public float getBuyKrw() {
+    public double getBuyKrw() {
         return mCoinValue * mBuyPrice;
     }
 
-    public float getSellKrw() {
+    public double getSellKrw() {
         return mCoinValue * mSellPrice;
     }
 
-    public float getCurKrw() {
+    public double getCurKrw() {
         return mCoinValue * mCurPrice;
     }
 
@@ -44,11 +48,11 @@ public class Coin {
         return mCoinType.toString();
     }
 
-    public float getBuyCoin(float krw) {
+    public double getBuyCoin(double krw) {
         return krw / mBuyPrice;
     }
 
-    public float getSellCoin(float krw) {
+    public double getSellCoin(double krw) {
         return krw / mSellPrice;
     }
 

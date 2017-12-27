@@ -23,17 +23,17 @@ public class TradeModelTest {
     @Test
     public void shouldTrade() throws Exception {
         Balance balance = new Balance();
-        balance.setKrw(20000.f);
+        balance.setKrw(20000.);
 
         for (int i = 0; i < 4; i++) {
-            Coin coin = createCoin(i, 100.f, 100.f);
+            Coin coin = createCoin(i, 100., 100.);
             balance.updateCoin(coin);
         }
 
         mTradeModel.setBalance(balance);
-        mTradeModel.setCoinRate(0.8f);
-        mTradeModel.setKrwRate(0.2f);
-        mTradeModel.setTriggerRate(2.f);
+        mTradeModel.setCoinRate(0.8);
+        mTradeModel.setKrwRate(0.2);
+        mTradeModel.setTriggerRate(2.);
 
         ArrayList<TradeInfo> tradeInfoList = mTradeModel.getTradeInfoList();
         assertThat(tradeInfoList.size(), is(4));
@@ -41,19 +41,19 @@ public class TradeModelTest {
             TradeInfo tradeInfo = tradeInfoList.get(i);
             assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(i).toString()));
             assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-            assertThat(tradeInfo.getTradeAmount(), is(40.f));
+            assertThat(tradeInfo.getTradeCoinAmount(), is(40.));
         }
 
 
         for (int i = 0; i < 4; i++) {
             Coin coin = balance.getCoin(i);
-            coin.setCoinValue(40.f);
+            coin.setCoinValue(40.);
             balance.updateCoin(coin);
         }
-        balance.setKrw(4000.f);
+        balance.setKrw(4000.);
 
-        Coin coin = createCoin(0, 95.f, 95.f);
-        coin.setCoinValue(40.f);
+        Coin coin = createCoin(0, 95., 95.);
+        coin.setCoinValue(40.);
         balance.updateCoin(coin);
 
         tradeInfoList = mTradeModel.getTradeInfoList();
@@ -61,13 +61,13 @@ public class TradeModelTest {
         TradeInfo tradeInfo = tradeInfoList.get(0);
         assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(0).toString()));
         assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-        assertThat(tradeInfo.getTradeAmount(), is(1.684f));
+        assertThat(tradeInfo.getTradeCoinAmount(), is(1.684));
 
 
     }
 
     @NonNull
-    private Coin createCoin(int coinType, float buyPrice, float sellPrice) {
+    private Coin createCoin(int coinType, double buyPrice, double sellPrice) {
         Coin coin = new Coin(coinType);
         coin.setBuyPrice(buyPrice);
         coin.setSellPrice(sellPrice);

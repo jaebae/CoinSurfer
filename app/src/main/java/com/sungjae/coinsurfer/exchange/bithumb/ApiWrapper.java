@@ -1,25 +1,15 @@
 package com.sungjae.coinsurfer.exchange.bithumb;
 
-import com.sungjae.app.showmethemoney.activity.setting.ConfigurationConstants;
-import com.sungjae.app.showmethemoney.service.api.model.Balance;
-import com.sungjae.app.showmethemoney.service.api.model.Currency;
-import com.sungjae.app.showmethemoney.service.api.model.Result;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.content.Context;
 
 
 public class ApiWrapper {
-    private Api_Client mApi = new Api_Client(ConfigurationConstants.CONNECT_KEY, ConfigurationConstants.SECRET_KEY);
-    private String mCoinType;
+    private Api_Client mApi = new Api_Client();
+    private Context mContext;
 
-    public ApiWrapper(String coinType) {
-        mCoinType = coinType;
+
+    /*public ApiWrapper(Context context) {
+        mContext = context;
     }
 
     public Currency getCurrency() throws Exception {
@@ -142,5 +132,5 @@ public class ApiWrapper {
         }
 
         return ret;
-    }
+    }*/
 }

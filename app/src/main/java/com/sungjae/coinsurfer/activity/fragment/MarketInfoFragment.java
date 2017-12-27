@@ -28,7 +28,7 @@ public class MarketInfoFragment extends Fragment implements TradeSetting.OnSetti
 
     @Override
     public void onSettingChange() {
-        float investKrw = mTradeSetting.getInvestKrw();
+        double investKrw = mTradeSetting.getInvestKrw();
         ArrayList<CoinType> enableCoin = mTradeSetting.getEnableCoinList();
 
         int i = 0;

@@ -17,9 +17,9 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
     private Context mContext;
     private SharedPreferences mSharedPreferences;
     private ArrayList<OnSettingChangeListener> mOnSettingChangeListener = new ArrayList<>();
-    private float mCoinRate;
-    private float mKrwRate;
-    private float mInvestKrw;
+    private double mCoinRate;
+    private double mKrwRate;
+    private double mInvestKrw;
     private String mConnectKey;
     private String mSecretKey;
     private ArrayList<CoinType> mEnableCoinList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
         return sTradeSettingInstance;
     }
 
-    public float getInvestKrw() {
+    public double getInvestKrw() {
         return mInvestKrw;
     }
 
@@ -95,22 +95,30 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private void updateInvestInfo() {
-        mCoinRate = getFloatValue("coin_rate", 0.8f);
-        mKrwRate = getFloatValue("krw_rate", 0.2f);
+        mCoinRate = getDoubleValue("coin_rate", 0.8);
+        mKrwRate = getDoubleValue("krw_rate", 0.2);
 
-        mInvestKrw = getFloatValue("invest_krw", 1000000f);
+        mInvestKrw = getDoubleValue("invest_krw", 1000000f);
 
         mPollingTime = getLongValue("polling_time", 10L);
     }
 
-    private float getFloatValue(String key, float defaultValue) {
+    private double getDoubleValue(String key, double defaultValue) {
         String value = mSharedPreferences.getString(key, "" + defaultValue);
-        return Float.parseFloat(value);
+        return Double.parseDouble(value);
     }
 
     private long getLongValue(String key, long defaultValue) {
         String value = mSharedPreferences.getString(key, "" + defaultValue);
         return Long.parseLong(value);
+    }
+
+    public String getConnectKey() {
+        return mConnectKey;
+    }
+
+    public String getSecretKey() {
+        return mSecretKey;
     }
 
     public interface OnSettingChangeListener {

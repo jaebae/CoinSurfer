@@ -4,18 +4,18 @@ package com.sungjae.coinsurfer.tradedata;
 import java.util.ArrayList;
 
 public enum CoinType {
-    BTC(0.001f),
-    BCH(0.001f),
-    ETH(0.01f),
-    QTUM(0.1f),
-    DASH(0.01f),
-    LTC(0.1f),
-    ETC(0.1f),
-    XRP(10.f),
-    XMR(0.01f),
-    ZEC(0.001f),
-    BTG(0.01f),
-    EOS(1.0f);
+    BTC(0.001),
+    BCH(0.001),
+    ETH(0.01),
+    QTUM(0.1),
+    DASH(0.01),
+    LTC(0.1),
+    ETC(0.1),
+    XRP(10.),
+    XMR(0.01),
+    ZEC(0.001),
+    BTG(0.01),
+    EOS(1.0);
 
     private static ArrayList<CoinType> sCoinList = new ArrayList<>();
 
@@ -27,9 +27,9 @@ public enum CoinType {
     }
 
 
-    private float mTradeUnit;
+    private double mTradeUnit;
 
-    CoinType(float tradeUnit) {
+    CoinType(double tradeUnit) {
         mTradeUnit = tradeUnit;
     }
 
@@ -41,7 +41,7 @@ public enum CoinType {
         return sCoinList.get(code);
     }
 
-    float getTradeUnit() {
+    double getTradeUnit() {
         return mTradeUnit;
     }
 

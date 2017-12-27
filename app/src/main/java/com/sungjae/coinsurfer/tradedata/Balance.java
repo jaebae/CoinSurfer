@@ -6,20 +6,24 @@ import java.util.ArrayList;
 
 public class Balance {
     private ArrayList<Coin> mCoinList = new ArrayList<>();
-    private float mKrw;
+    private double mKrw;
 
     public Balance() {
 
     }
 
-    public float getTotalAsKrw() {
-        float ret = mKrw;
+    public double getTotalAsKrw() {
+        double ret = mKrw;
 
         for (Coin coin : mCoinList) {
             ret += coin.getCurKrw();
         }
 
         return ret;
+    }
+
+    public void clearCoinInfo() {
+        mCoinList.clear();
     }
 
 
@@ -51,11 +55,11 @@ public class Balance {
         return mCoinList.get(index);
     }
 
-    public float getKrw() {
+    public double getKrw() {
         return mKrw;
     }
 
-    public void setKrw(float krw) {
+    public void setKrw(double krw) {
         mKrw = krw;
     }
 }

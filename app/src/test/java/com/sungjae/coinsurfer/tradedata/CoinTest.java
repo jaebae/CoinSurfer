@@ -20,25 +20,25 @@ public class CoinTest {
 
     @Test
     public void krwShouldBeReturn() throws Exception {
-        mCoin.setSellPrice(1.f);
-        mCoin.setCoinValue(1.f);
-        assertThat(mCoin.getSellKrw(), is(1.f));
+        mCoin.setSellPrice(1.);
+        mCoin.setCoinValue(1.);
+        assertThat(mCoin.getSellKrw(), is(1.));
 
-        mCoin.setCoinValue(2.f);
-        assertThat(mCoin.getSellKrw(), is(2.f));
+        mCoin.setCoinValue(2.);
+        assertThat(mCoin.getSellKrw(), is(2.));
 
 
-        mCoin.setBuyPrice(2.f);
-        mCoin.setCoinValue(2.f);
-        assertThat(mCoin.getBuyKrw(), is(4.f));
+        mCoin.setBuyPrice(2.);
+        mCoin.setCoinValue(2.);
+        assertThat(mCoin.getBuyKrw(), is(4.));
 
-        mCoin.setBuyPrice(0.5f);
-        mCoin.setCoinValue(2.f);
-        assertThat(mCoin.getBuyKrw(), is(1.f));
+        mCoin.setBuyPrice(0.5);
+        mCoin.setCoinValue(2.);
+        assertThat(mCoin.getBuyKrw(), is(1.));
 
-        mCoin.setCoinValue(1.f);
-        mCoin.setCurPrice(0.2f);
-        assertThat(mCoin.getCurKrw(), is(0.2f));
+        mCoin.setCoinValue(1.);
+        mCoin.setCurPrice(0.2);
+        assertThat(mCoin.getCurKrw(), is(0.2));
 
     }
 
@@ -50,13 +50,13 @@ public class CoinTest {
 
     @Test
     public void getBuyKrwTest() throws Exception {
-        mCoin.setBuyPrice(10.f);
-        assertThat(mCoin.getBuyCoin(10.f), is(1.f));
-        assertThat(mCoin.getBuyCoin(100.f), is(10.f));
+        mCoin.setBuyPrice(10.);
+        assertThat(mCoin.getBuyCoin(10.), is(1.));
+        assertThat(mCoin.getBuyCoin(100.), is(10.));
 
-        mCoin.setSellPrice(5.f);
-        assertThat(mCoin.getSellCoin(10.f), is(2.f));
-        assertThat(mCoin.getSellCoin(100.f), is(20.f));
+        mCoin.setSellPrice(5.);
+        assertThat(mCoin.getSellCoin(10.), is(2.));
+        assertThat(mCoin.getSellCoin(100.), is(20.));
     }
 
 }
