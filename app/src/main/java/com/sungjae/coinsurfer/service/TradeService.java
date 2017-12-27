@@ -23,6 +23,9 @@ import com.sungjae.coinsurfer.tradedata.TradeModel;
 
 import java.util.ArrayList;
 
+import static com.sungjae.coinsurfer.tradedata.TradeInfo.TradeType.BUY;
+import static com.sungjae.coinsurfer.tradedata.TradeInfo.TradeType.SELL;
+
 public class TradeService extends Service implements TradeSetting.OnSettingChangeListener {
 
     private Handler mHandler;
@@ -75,15 +78,27 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
             synchronized (SETTING_LOCK) {
                 mExchange.getMarketPrice(mBalance);
                 mExchange.getBalance(mBalance);
+                //mBalance.setKrw(500000);
                 ArrayList<TradeInfo> tradeList = mTradeModel.getTradeInfoList();
-                for (TradeInfo tradeInfo : tradeList) {
-                    mExchange.trade(tradeInfo);
-                }
+                trade(tradeList, SELL); //sell should do first to get KRW for Buy
+                trade(tradeList, BUY);
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void trade(ArrayList<TradeInfo> tradeList, TradeInfo.TradeType tradeType) throws Exception {
+        for (TradeInfo tradeInfo : tradeList) {
+            if (tradeInfo.getTradeType() == tradeType) {
+                TradeInfo tradeResult = mExchange.trade(tradeInfo);
+                writeLog(tradeResult);
+            }
+        }
+    }
+
+    private void writeLog(TradeInfo tradeResult) {
     }
 
     @NonNull

@@ -38,9 +38,9 @@ public class TradeModelTest {
         assertThat(tradeInfoList.size(), is(4));
         for (int i = 0; i < tradeInfoList.size(); i++) {
             TradeInfo tradeInfo = tradeInfoList.get(i);
-            assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(i).toString()));
+            assertThat(tradeInfo.getCoinName(), is(CoinType.getCoinType(i).toString()));
             assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-            assertThat(tradeInfo.getTradeCoinAmount(), is(40.));
+            //assertThat(tradeInfo.getTradeCoinAmount(), is("40"));
         }
 
 
@@ -58,9 +58,9 @@ public class TradeModelTest {
         tradeInfoList = mTradeModel.getTradeInfoList();
 
         TradeInfo tradeInfo = tradeInfoList.get(0);
-        assertThat(tradeInfo.getCoinType().toString(), is(CoinType.getCoinType(0).toString()));
+        assertThat(tradeInfo.getCoinName(), is(CoinType.getCoinType(0).toString()));
         assertThat(tradeInfo.getTradeType(), is(TradeInfo.TradeType.BUY));
-        assertThat(tradeInfo.getTradeCoinAmount(), is(1.6842105263157894));
+        assertThat(tradeInfo.getTradeCoinAmount(), is("1.684"));
 
 
     }

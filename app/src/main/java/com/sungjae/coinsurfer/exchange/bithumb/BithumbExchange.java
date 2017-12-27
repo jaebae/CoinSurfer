@@ -74,7 +74,44 @@ public class BithumbExchange implements Exchange {
 
     @Override
     public TradeInfo trade(TradeInfo tradeInfo) throws Exception {
-        return null;
+        HashMap<String, String> param = new HashMap<>();
+
+        param.put("units", tradeInfo.getTradeCoinAmount());
+        param.put("currency", tradeInfo.getCoinName());
+
+        String apiName = "/trade/market_buy/";
+        if (tradeInfo.getTradeType() == TradeInfo.TradeType.SELL) {
+            apiName = "/trade/market_sell/";
+        }
+
+        //return toResult("{\"status\":\"0000\",\"order_id\":\"1514386796583604\",\"data\":[{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225}]}", tradeInfo.getCoinType());
+
+        String data = callApi(apiName, null, param);
+        System.out.println(data);
+
+        return getTradeResult(data, tradeInfo);
+    }
+
+    public TradeInfo getTradeResult(String data, TradeInfo tradeInfo) {
+        TradeInfo result = new TradeInfo(tradeInfo.getCoinType());
+        result.setTradeType(tradeInfo.getTradeType());
+
+        JSONArray jsonArray = getArrayValueObj(data);
+        double unit = 0;
+        double totalKrw = 0;
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+            unit += Double.parseDouble(getString("units", jsonObject));
+            totalKrw += Double.parseDouble(getString("total", jsonObject));
+        }
+
+
+        result.setTradeCoinAmount(unit);
+        result.setTradeKrw(totalKrw);
+
+        return result;
     }
 
 
@@ -96,7 +133,6 @@ public class BithumbExchange implements Exchange {
         }
 
         return ret;
-
     }
 
     private String getString(String key, JSONObject data) {

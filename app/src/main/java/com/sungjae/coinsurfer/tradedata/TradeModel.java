@@ -50,25 +50,25 @@ public class TradeModel {
     }
 
     private TradeInfo createBuyTradeInfo(Coin coin, double targetCoin) {
-        double diff = targetCoin - coin.getBuyKrw();
+        double diff = targetCoin - coin.getSellKrw();
         double rate = (diff / targetCoin) * 100.f;
 
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
 
         if (rate > mTriggerRate) {
             tradeInfo.setTradeType(TradeInfo.TradeType.BUY);
-            tradeInfo.setTradeCoinAmount(coin.getBuyCoin(diff));
+            tradeInfo.setTradeCoinAmount(coin.getSellCoin(diff));
         }
         return tradeInfo;
     }
 
     private TradeInfo createSellTradeInfo(Coin coin, double targetCoin) {
-        double diff = coin.getSellKrw() - targetCoin;
+        double diff = coin.getBuyKrw() - targetCoin;
         double rate = (diff / targetCoin) * 100.f;
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
         if (rate > mTriggerRate) {
             tradeInfo.setTradeType(TradeInfo.TradeType.SELL);
-            tradeInfo.setTradeCoinAmount(coin.getSellCoin(diff));
+            tradeInfo.setTradeCoinAmount(coin.getBuyCoin(diff));
         }
         return tradeInfo;
     }

@@ -6,9 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.sungjae.coinsurfer.tradedata.CoinType.BTC;
-import static com.sungjae.coinsurfer.tradedata.CoinType.ETH;
-import static com.sungjae.coinsurfer.tradedata.CoinType.QTUM;
-import static com.sungjae.coinsurfer.tradedata.CoinType.XRP;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -62,7 +59,7 @@ public class CoinTest {
         assertThat(mCoin.getSellCoin(100.), is(20.));
     }
 
-    @Test
+    /*@Test
     public void makeAsTradeUnitTest() throws Exception {
 
         Coin coin = new Coin(BTC);
@@ -77,7 +74,5 @@ public class CoinTest {
         coin = new Coin(XRP);
         assertThat(coin.makeAsTradeUnit(12.12345678), is("10"));
         assertThat(coin.makeAsTradeUnit(19.12345678), is("20"));
-
-
-    }
+    }*/
 }

@@ -16,6 +16,10 @@ public class Coin {
         mCoinType = coinType;
     }
 
+    public double getCoinValue() {
+        return mCoinValue;
+    }
+
     public void setCoinValue(double coinValue) {
         mCoinValue = coinValue;
     }
@@ -60,20 +64,9 @@ public class Coin {
         return mCoinType;
     }
 
-    public String makeAsTradeUnit(double value) {
-        if (mCoinType.getTradeUnit() == 0.1) {
-            return String.format("%.1f", value);
-        } else if (mCoinType.getTradeUnit() == 0.01) {
-            return String.format("%.2f", value);
-        } else if (mCoinType.getTradeUnit() == 0.001) {
-            return String.format("%.3f", value);
-        } else if (mCoinType.getTradeUnit() == 1) {
-            return String.format("%.0f", value);
-        } else if (mCoinType.getTradeUnit() == 10) {
-            String ret = String.format("%.0f", (value / 10));
-            return ret + "0";
-        }
 
-        return "";
+    @Override
+    public String toString() {
+        return getCoinName() + "/ value = " + mCoinValue + "As krw = " + (mCoinValue * mCurPrice);
     }
 }
