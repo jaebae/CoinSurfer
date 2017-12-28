@@ -68,6 +68,11 @@ public class TradeInfo {
     }
 
     public enum TradeType {
-        HOLD, BUY, SELL
+        HOLD, BUY, SELL;
+
+
+        public static TradeType getTradeType(int index) {
+            return TradeType.values()[index];
+        }
     }
 }

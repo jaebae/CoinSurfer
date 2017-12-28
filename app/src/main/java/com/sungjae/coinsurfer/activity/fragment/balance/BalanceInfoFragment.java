@@ -1,7 +1,10 @@
 package com.sungjae.coinsurfer.activity.fragment.balance;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,9 @@ public class BalanceInfoFragment extends BaseFragment {
     private ListView mCoinListView;
     private CoinInfoAdapter mCoinListAdapter;
 
+    private ListView mBalanceListView;
+    private BalanceListAdapter mBalanceListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +53,11 @@ public class BalanceInfoFragment extends BaseFragment {
         mCoinListView = view.findViewById(R.id.coin_list);
         mCoinListAdapter = new CoinInfoAdapter(this.getContext(), mBalance.getCoinList());
         mCoinListView.setAdapter(mCoinListAdapter);
+
+        mBalanceListAdapter = new BalanceListAdapter(getContext(), R.layout.balance_list_item_layout, null, 0);
+        mBalanceListView = view.findViewById(R.id.balance_list);
+        mBalanceListView.setAdapter(mBalanceListAdapter);
+        addCursorLoader(5, null, createLoader());
     }
 
     @Override
@@ -54,6 +65,11 @@ public class BalanceInfoFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mBalance = Balance.getsInstance();
         mTradeModel = TradeModel.getInstance();
+    }
+
+    @Override
+    protected ResourceCursorAdapter getAdapterById(int id) {
+        return mBalanceListAdapter;
     }
 
     @Override
@@ -70,5 +86,16 @@ public class BalanceInfoFragment extends BaseFragment {
         mTargetCoinKrwView.setText("기준값 : " + String.format("%,.0f", mTradeModel.getTargetCoinAsKrw()));
 
         mCoinListAdapter.notifyDataSetChanged();
+    }
+
+
+    private CursorLoader createLoader() {
+        String projection[] = new String[]{
+                "STRFTIME ('%Y-%m-%d %H:%M', date / 1000, 'unixepoch', 'localtime') as strdate",
+                "krw",
+                "_id"
+        };
+
+        return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/balance"), projection, null, null, "_id desc");
     }
 }

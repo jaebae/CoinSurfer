@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="16/17 14:52"
+        android:textAlignment="viewEnd" />
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="33dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="BTC"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/trade"
+        android:layout_width="33dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="매입"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/unit"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:maxLines="1"
+        android:text="111.01"
+        android:textAlignment="viewEnd" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:maxLines="1"
+        android:text="2,508,000"
+        android:textAlignment="viewEnd" />
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:maxLines="1"
+        android:text="25,008,000"
+        android:textAlignment="viewEnd" />
+</LinearLayout>

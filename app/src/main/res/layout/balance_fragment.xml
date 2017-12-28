@@ -76,4 +76,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View style="@style/Divider" />
+
+    <TextView
+        style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="자산"
+        android:textAlignment="center" />
+
+    <View style="@style/Divider" />
+
+    <ListView
+        android:id="@+id/balance_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
