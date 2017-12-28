@@ -22,7 +22,7 @@ public class TradeModelTest {
 
     @Test
     public void shouldTrade() throws Exception {
-        Balance balance = new Balance();
+        Balance balance = Balance.getsInstance();
         balance.setKrw(20000.);
 
         for (int i = 0; i < 4; i++) {

@@ -23,6 +23,10 @@
                 <action android:name="TradeService" />
             </intent-filter>
         </service>
+        <provider
+            android:name=".provider.TradeProvider"
+            android:authorities="coinsurfer"
+            android:exported="false" />
     </application>
 
 </manifest>

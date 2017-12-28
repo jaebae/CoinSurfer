@@ -12,10 +12,6 @@ import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 
-/**
- * Created by 배성재 on 2017-12-27.
- */
-
 public class BithumbExchange implements Exchange {
     private Api_Client mApi = new Api_Client();
 
@@ -84,7 +80,7 @@ public class BithumbExchange implements Exchange {
             apiName = "/trade/market_sell/";
         }
 
-        //return toResult("{\"status\":\"0000\",\"order_id\":\"1514386796583604\",\"data\":[{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225}]}", tradeInfo.getCoinType());
+        //return getTradeResult("{\"status\":\"0000\",\"order_id\":\"1514386796583604\",\"data\":[{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225}]}", tradeInfo);
 
         String data = callApi(apiName, null, param);
         System.out.println(data);

@@ -38,6 +38,10 @@ public class TradeInfo {
         mTradeCoinAmount = amount;
     }
 
+    public double getTradePrice() {
+        return mTradeKrw / mTradeCoinAmount;
+    }
+
     public double getTradeKrw() {
         return mTradeKrw;
     }

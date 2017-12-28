@@ -5,11 +5,19 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 
 public class Balance {
+    private static Balance sInstance;
     private ArrayList<Coin> mCoinList = new ArrayList<>();
     private double mKrw;
 
-    public Balance() {
+    private Balance() {
 
+    }
+
+    public synchronized static Balance getsInstance() {
+        if (sInstance == null) {
+            sInstance = new Balance();
+        }
+        return sInstance;
     }
 
     public double getTotalAsKrw() {

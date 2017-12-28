@@ -19,7 +19,7 @@ public class BalanceTest {
 
     @Before
     public void setUp() throws Exception {
-        mBalance = new Balance();
+        mBalance = Balance.getsInstance();
     }
 
     @Test

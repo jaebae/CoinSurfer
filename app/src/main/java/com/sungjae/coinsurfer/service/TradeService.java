@@ -2,7 +2,10 @@ package com.sungjae.coinsurfer.service;
 
 
 import android.app.Service;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -28,14 +31,14 @@ import static com.sungjae.coinsurfer.tradedata.TradeInfo.TradeType.SELL;
 
 public class TradeService extends Service implements TradeSetting.OnSettingChangeListener {
 
+    private final long BALANCE_LOG_INTERVAL = 1000 * 60L;
     private Handler mHandler;
     private TradeSetting mTradeSetting;
-
     private Exchange mExchange;
     private Balance mBalance;
     private TradeModel mTradeModel;
-
     private Object SETTING_LOCK = new Object();
+    private long mLastBalanceLogTime = 0L;
 
     @Override
     public void onCreate() {
@@ -44,7 +47,7 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         mTradeSetting.addOnChangedListener(this); // it don't need to unregister
 
         mExchange = ExchangeFactory.createBithumbExchange();
-        mBalance = new Balance();
+        mBalance = Balance.getsInstance();
         mTradeModel = new TradeModel();
         mTradeModel.setBalance(mBalance);
 
@@ -78,10 +81,17 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
             synchronized (SETTING_LOCK) {
                 mExchange.getMarketPrice(mBalance);
                 mExchange.getBalance(mBalance);
+
+                writeBalanceLog(mBalance);
+
                 //mBalance.setKrw(500000);
                 ArrayList<TradeInfo> tradeList = mTradeModel.getTradeInfoList();
-                trade(tradeList, SELL); //sell should do first to get KRW for Buy
-                trade(tradeList, BUY);
+                if (!tradeList.isEmpty()) {
+                    trade(tradeList, SELL); //sell should do first to get KRW for Buy
+                    trade(tradeList, BUY);
+                }
+
+                updateView();
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -93,12 +103,41 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         for (TradeInfo tradeInfo : tradeList) {
             if (tradeInfo.getTradeType() == tradeType) {
                 TradeInfo tradeResult = mExchange.trade(tradeInfo);
-                writeLog(tradeResult);
+                writeTradeLog(tradeResult);
             }
         }
     }
 
-    private void writeLog(TradeInfo tradeResult) {
+    private void writeBalanceLog(Balance balance) {
+        long curTime = System.currentTimeMillis();
+        if (curTime - mLastBalanceLogTime > BALANCE_LOG_INTERVAL) {
+            mLastBalanceLogTime = curTime;
+
+            Uri uri = Uri.parse("content://coinsurfer/balance");
+            ContentValues contentValue = new ContentValues();
+
+            contentValue.put("date", curTime);
+            contentValue.put("krw", balance.getTotalAsKrw());
+
+            ContentResolver cr = getContentResolver();
+            Uri result = cr.insert(uri, contentValue);
+            cr.notifyChange(uri, null);
+        }
+    }
+
+    private void writeTradeLog(TradeInfo tradeResult) {
+        Uri uri = Uri.parse("content://coinsurfer/trade");
+        ContentValues contentValue = new ContentValues();
+        contentValue.put("date", System.currentTimeMillis());
+        contentValue.put("trade", tradeResult.getTradeType().ordinal());
+        contentValue.put("coin", tradeResult.getCoinType().ordinal());
+        contentValue.put("unit", tradeResult.getTradeCoinAmount());
+        contentValue.put("price", tradeResult.getTradePrice());
+        contentValue.put("krw", tradeResult.getTradeKrw());
+
+        ContentResolver cr = getContentResolver();
+        Uri result = cr.insert(uri, contentValue);
+        cr.notifyChange(uri, null);
     }
 
     @NonNull
@@ -133,5 +172,10 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
             mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
         }
+    }
+
+    private void updateView() {
+        Intent intent = new Intent("UPDATE_VIEW");
+        getApplicationContext().sendBroadcast(intent);
     }
 }
