@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTabLayout() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Market Info"));
+        tabLayout.addTab(tabLayout.newTab().setText("Balance"));
         tabLayout.addTab(tabLayout.newTab().setText("Trade History"));
         tabLayout.addTab(tabLayout.newTab().setText("Setting"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

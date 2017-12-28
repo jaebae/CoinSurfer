@@ -4,30 +4,72 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/total_as_krw"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="총자산 : 1000,000,000" />
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <TextView
-        android:id="@+id/profit"
+        <TextView
+            android:id="@+id/total_as_krw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="총자산 : 1000,000,000" />
+
+        <TextView
+            android:id="@+id/profit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이익률 : 1,400%" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="이익률 : 1,400%" />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/cur_krw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="현금 : 200,000,000" />
+
+        <TextView
+            android:id="@+id/invested_krw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="투자 금 : 800,000,000" />
+    </LinearLayout>
+
+    <View style="@style/Divider" />
+
 
     <TextView
-        android:id="@+id/cur_krw"
+        android:id="@+id/coin_list_title"
+        style="@style/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="현금 : 200,000,000" />
+        android:layout_marginTop="5dp"
+        android:text="코인 현황"
+        android:textAlignment="center" />
 
     <TextView
-        android:id="@+id/invested_krw"
+        android:id="@+id/target_coin_krw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="투자 금 : 800,000,000" />
+        android:layout_marginRight="5dp"
+        android:text="기준 값 : 800,000,000"
+        android:textAlignment="textEnd" />
 
+
+    <View style="@style/Divider" />
 
     <ListView
         android:id="@+id/coin_list"

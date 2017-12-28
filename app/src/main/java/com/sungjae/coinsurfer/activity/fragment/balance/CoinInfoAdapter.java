@@ -55,7 +55,7 @@ public class CoinInfoAdapter extends ArrayAdapter<Coin> {
             tvDiffRate.setTextColor(Color.BLUE);
         }
 
-        tvDiffRate.setText(String.format("%,.02f", diff));
+        tvDiffRate.setText(String.format("%,.02f%%", Math.abs(diff)));
 
         return convertView;
     }

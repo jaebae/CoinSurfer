@@ -83,7 +83,6 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
                 writeBalanceLog(mBalance);
 
-                //mBalance.setKrw(500000);
                 ArrayList<TradeInfo> tradeList = mTradeModel.getTradeInfoList();
                 if (!tradeList.isEmpty()) {
                     trade(tradeList, SELL); //sell should do first to get KRW for Buy
