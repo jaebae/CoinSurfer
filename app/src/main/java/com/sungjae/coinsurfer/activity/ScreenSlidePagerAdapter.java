@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.sungjae.coinsurfer.activity.fragment.BalanceInfoFragment;
+import com.sungjae.coinsurfer.activity.fragment.balance.BalanceInfoFragment;
 import com.sungjae.coinsurfer.activity.fragment.SettingFragment;
 import com.sungjae.coinsurfer.activity.fragment.TradeHistoryFragment;
 

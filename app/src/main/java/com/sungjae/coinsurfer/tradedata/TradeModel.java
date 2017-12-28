@@ -5,14 +5,24 @@ import java.util.ArrayList;
 
 public class TradeModel {
 
-    double mCoinRate;
+    private double mCoinRate;
 
-    double mTriggerRate;
+    private double mTriggerRate;
 
-    Balance mBalance;
+    private Balance mBalance;
 
-    public void setBalance(Balance balance) {
-        mBalance = balance;
+    private static TradeModel sInstance;
+
+    public static synchronized TradeModel getInstance() {
+        if (sInstance == null) {
+            sInstance = new TradeModel();
+        }
+
+        return sInstance;
+    }
+
+    private TradeModel() {
+        mBalance = Balance.getsInstance();
     }
 
     public void setCoinRate(double coinRate) {
@@ -27,9 +37,7 @@ public class TradeModel {
     public ArrayList<TradeInfo> getTradeInfoList() {
         ArrayList<TradeInfo> tradeInfoList = new ArrayList<>();
 
-        double totalAsKrw = mBalance.getTotalAsKrw();
-
-        double targetCoin = (totalAsKrw * mCoinRate) / mBalance.getCoinCount();
+        double targetCoin = getTargetCoinAsKrw();
 
         for (int i = 0; i < mBalance.getCoinCount(); i++) {
             Coin coin = mBalance.getCoin(i);
@@ -47,6 +55,11 @@ public class TradeModel {
         }
 
         return tradeInfoList;
+    }
+
+    public double getTargetCoinAsKrw() {
+        double totalAsKrw = mBalance.getTotalAsKrw();
+        return (totalAsKrw * mCoinRate) / mBalance.getCoinCount();
     }
 
     private TradeInfo createBuyTradeInfo(Coin coin, double targetCoin) {

@@ -4,4 +4,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/total_as_krw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="총자산 : 1000,000,000" />
+
+    <TextView
+        android:id="@+id/profit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이익률 : 1,400%" />
+
+    <TextView
+        android:id="@+id/cur_krw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="현금 : 200,000,000" />
+
+    <TextView
+        android:id="@+id/invested_krw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="투자 금 : 800,000,000" />
+
+
+    <ListView
+        android:id="@+id/coin_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

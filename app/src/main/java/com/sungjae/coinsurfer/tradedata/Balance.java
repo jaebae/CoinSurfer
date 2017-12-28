@@ -35,7 +35,7 @@ public class Balance {
     }
 
 
-    public void updateCoin(@NonNull Coin coin) {
+    public synchronized void updateCoin(@NonNull Coin coin) {
         int index = getIndex(coin);
         if (index >= 0) {
             mCoinList.remove(index);
@@ -61,6 +61,10 @@ public class Balance {
 
     public Coin getCoin(int index) {
         return mCoinList.get(index);
+    }
+
+    public ArrayList<Coin> getCoinList() {
+        return mCoinList;
     }
 
     public double getKrw() {

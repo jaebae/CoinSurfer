@@ -12,7 +12,6 @@ import static org.junit.Assert.assertThat;
 
 
 public class TradeModelTest {
-
     private TradeModel mTradeModel;
 
     @Before
@@ -30,7 +29,6 @@ public class TradeModelTest {
             balance.updateCoin(coin);
         }
 
-        mTradeModel.setBalance(balance);
         mTradeModel.setCoinRate(0.8);
         mTradeModel.setTriggerRate(2.);
 

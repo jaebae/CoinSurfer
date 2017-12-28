@@ -48,8 +48,7 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
         mExchange = ExchangeFactory.createBithumbExchange();
         mBalance = Balance.getsInstance();
-        mTradeModel = new TradeModel();
-        mTradeModel.setBalance(mBalance);
+        mTradeModel = TradeModel.getInstance();
 
         applySettingValue();
 

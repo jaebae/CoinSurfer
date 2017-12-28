@@ -36,6 +36,10 @@ public class Coin {
         mCurPrice = curPrice;
     }
 
+    public double getCurPrice() {
+        return mCurPrice;
+    }
+
     public double getBuyKrw() {
         return mCoinValue * mBuyPrice;
     }
