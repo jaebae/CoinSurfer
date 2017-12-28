@@ -1,12 +1,7 @@
 package com.sungjae.coinsurfer.activity.fragment.balance;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +9,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sungjae.coinsurfer.R;
-import com.sungjae.coinsurfer.setting.TradeSetting;
+import com.sungjae.coinsurfer.activity.fragment.BaseFragment;
 import com.sungjae.coinsurfer.tradedata.Balance;
-import com.sungjae.coinsurfer.tradedata.CoinType;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
 
-import java.util.ArrayList;
 
+public class BalanceInfoFragment extends BaseFragment {
 
-public class BalanceInfoFragment extends Fragment implements TradeSetting.OnSettingChangeListener {
-
-    private TradeSetting mTradeSetting;
     private Balance mBalance;
     private TradeModel mTradeModel;
 
@@ -36,12 +27,6 @@ public class BalanceInfoFragment extends Fragment implements TradeSetting.OnSett
 
     private ListView mCoinListView;
     private CoinInfoAdapter mCoinListAdapter;
-    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateView();
-        }
-    };
 
     @Nullable
     @Override
@@ -68,26 +53,11 @@ public class BalanceInfoFragment extends Fragment implements TradeSetting.OnSett
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBalance = Balance.getsInstance();
-        mTradeSetting = TradeSetting.getInstance(getContext());
-        mTradeSetting.addOnChangedListener(this);
-
         mTradeModel = TradeModel.getInstance();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mTradeSetting.removeOnChangedListener(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerBroadcastReceivers();
-        updateView();
-    }
-
-    private void updateView() {
+    protected void updateView() {
         double totalKrw = mBalance.getTotalAsKrw();
         double curKrw = mBalance.getKrw();
         double investedKrw = totalKrw - curKrw;
@@ -100,29 +70,5 @@ public class BalanceInfoFragment extends Fragment implements TradeSetting.OnSett
         mTargetCoinKrwView.setText("기준값 : " + String.format("%,.0f", mTradeModel.getTargetCoinAsKrw()));
 
         mCoinListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterBroadcastReceivers();
-    }
-
-    @Override
-    public void onSettingChange() {
-        double investKrw = mTradeSetting.getInvestKrw();
-        ArrayList<CoinType> enableCoin = mTradeSetting.getEnableCoinList();
-
-
-    }
-
-    private void registerBroadcastReceivers() {
-        IntentFilter filter = new IntentFilter("UPDATE_VIEW");
-        getContext().registerReceiver(mBroadcastReceiver, filter);
-
-    }
-
-    private void unregisterBroadcastReceivers() {
-        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 }
