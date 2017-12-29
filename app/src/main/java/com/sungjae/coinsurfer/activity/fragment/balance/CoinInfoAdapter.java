@@ -47,15 +47,17 @@ public class CoinInfoAdapter extends ArrayAdapter<Coin> {
         tvPrice.setText(String.format("%,.0f", coin.getCurPrice()));
 
 
-        double diff = (coin.getCurKrw() - mTradeModel.getTargetCoinAsKrw()) / mTradeModel.getTargetCoinAsKrw();
-
-        if (diff > 0) {
-            tvDiffRate.setTextColor(Color.RED);
-        } else {
+        double diff;
+        if (mTradeModel.getTargetCoinAsKrw() > coin.getCurKrw()) {
             tvDiffRate.setTextColor(Color.BLUE);
+            diff = (mTradeModel.getTargetCoinAsKrw() - coin.getSellKrw()) / mTradeModel.getTargetCoinAsKrw();
+        } else {
+            tvDiffRate.setTextColor(Color.RED);
+            diff = (coin.getBuyKrw() - mTradeModel.getTargetCoinAsKrw()) / mTradeModel.getTargetCoinAsKrw();
         }
 
-        tvDiffRate.setText(String.format("%,.02f%%", Math.abs(diff)));
+
+        tvDiffRate.setText(String.format("%,.02f%%", diff * 100));
 
         return convertView;
     }
