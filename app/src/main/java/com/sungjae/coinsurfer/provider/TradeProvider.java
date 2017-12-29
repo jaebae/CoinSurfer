@@ -29,7 +29,11 @@ public class TradeProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projectionIn, String selection, String[] selectionArgs, String sortOrder) {
-        return mDatabase.query(getTableName(uri), projectionIn, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = mDatabase.query(getTableName(uri), projectionIn, selection, selectionArgs, null, null, sortOrder);
+        if (cursor != null) {
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
+        return cursor;
     }
 
     @NonNull
@@ -51,7 +55,9 @@ public class TradeProvider extends ContentProvider {
 
         if (rowId > 0) {
             ret = ContentUris.withAppendedId(uri, rowId);
+            notifyChange(uri);
         }
+
 
         return ret;
     }
@@ -64,6 +70,10 @@ public class TradeProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
+    }
+
+    private void notifyChange(Uri uri) {
+        getContext().getContentResolver().notifyChange(uri, null);
     }
 
 
