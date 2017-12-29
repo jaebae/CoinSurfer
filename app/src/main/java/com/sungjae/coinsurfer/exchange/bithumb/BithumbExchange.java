@@ -80,8 +80,6 @@ public class BithumbExchange implements Exchange {
             apiName = "/trade/market_sell/";
         }
 
-        //return getTradeResult("{\"status\":\"0000\",\"order_id\":\"1514386796583604\",\"data\":[{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225},{\"cont_id\":\"4876609\",\"units\":\"1.5\",\"price\":\"67130\",\"total\":100695,\"fee\":0.00225}]}", tradeInfo);
-
         String data = callApi(apiName, null, param);
         System.out.println(data);
 
