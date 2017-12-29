@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.sungjae.coinsurfer.R;
 import com.sungjae.coinsurfer.activity.fragment.BaseFragment;
 import com.sungjae.coinsurfer.tradedata.Balance;
@@ -34,6 +37,8 @@ public class BalanceInfoFragment extends BaseFragment {
     private ListView mBalanceListView;
     private BalanceListAdapter mBalanceListAdapter;
 
+    private GraphView mGraphView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class BalanceInfoFragment extends BaseFragment {
         mInvestedKrwView = view.findViewById(R.id.invested_krw);
         mTargetCoinKrwView = view.findViewById(R.id.target_coin_krw);
 
+        mGraphView = view.findViewById(R.id.graph);
+
         mCoinListView = view.findViewById(R.id.coin_list);
         mCoinListAdapter = new CoinInfoAdapter(this.getContext(), mBalance.getCoinList());
         mCoinListView.setAdapter(mCoinListAdapter);
@@ -58,6 +65,59 @@ public class BalanceInfoFragment extends BaseFragment {
         mBalanceListView = view.findViewById(R.id.balance_list);
         mBalanceListView.setAdapter(mBalanceListAdapter);
         addCursorLoader(5, null, createLoader());
+
+        graphTest();
+    }
+
+    void graphTest() {
+        GraphView graph = mGraphView;
+
+        // first series is a line
+        DataPoint[] points = new DataPoint[100];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = new DataPoint(i, Math.sin(i * 0.5) * 20 * (Math.random() * 10 + 1));
+        }
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
+
+        // set manual X bounds
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(-150);
+        graph.getViewport().setMaxY(150);
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(4);
+        graph.getViewport().setMaxX(80);
+
+        // enable scaling and scrolling
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScalableY(true);
+
+        graph.addSeries(series);
+
+        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 60)
+        });
+        graph.addSeries(series);
+
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 30),
+                new DataPoint(1, 30),
+                new DataPoint(2, 60),
+                new DataPoint(3, 20),
+                new DataPoint(4, 50)
+        });
+
+// set second scale
+        graph.getSecondScale().addSeries(series2);
+// the y bounds are always manual for second scale
+        graph.getSecondScale().setMinY(0);
+        graph.getSecondScale().setMaxY(100);
+        series2.setColor(Color.RED);
+        graph.getGridLabelRenderer().setVerticalLabelsSecondScaleColor(Color.RED);*/
     }
 
     @Override

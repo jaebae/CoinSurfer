@@ -88,6 +88,11 @@
 
     <View style="@style/Divider" />
 
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
     <ListView
         android:id="@+id/balance_list"
         android:layout_width="match_parent"
