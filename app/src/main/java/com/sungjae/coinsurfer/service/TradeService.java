@@ -81,8 +81,6 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
                 mExchange.getMarketPrice(mBalance);
                 mExchange.getBalance(mBalance);
 
-                writeBalanceLog(mBalance);
-
                 ArrayList<TradeInfo> tradeList = mTradeModel.getTradeInfoList();
                 if (!tradeList.isEmpty()) {
                     trade(tradeList, SELL); //sell should do first to get KRW for Buy
@@ -93,6 +91,10 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            if (mBalance.getKrw() > 0) {
+                writeBalanceLog(mBalance);
+            }
         }
 
     }
@@ -119,7 +121,6 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
             ContentResolver cr = getContentResolver();
             Uri result = cr.insert(uri, contentValue);
-            cr.notifyChange(uri, null);
         }
     }
 
