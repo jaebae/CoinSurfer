@@ -13,10 +13,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.sungjae.coinsurfer.exchange.Exchange;
 import com.sungjae.coinsurfer.exchange.ExchangeFactory;
+import com.sungjae.coinsurfer.notification.TradeNotification;
 import com.sungjae.coinsurfer.setting.TradeSetting;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
@@ -40,6 +40,8 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
     private Object SETTING_LOCK = new Object();
     private long mLastBalanceLogTime = 0L;
 
+    private TradeNotification mTradeNotification;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,6 +51,8 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         mExchange = ExchangeFactory.createBithumbExchange();
         mBalance = Balance.getsInstance();
         mTradeModel = TradeModel.getInstance();
+
+        mTradeNotification = new TradeNotification(getApplicationContext());
 
         applySettingValue();
 
@@ -87,16 +91,24 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
                     trade(tradeList, BUY);
                 }
 
-                updateView();
+                showNotifyMsg(getBalanceInfo());
             }
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            showNotifyMsg(e.getMessage());
         } finally {
             if (mBalance.getKrw() > 0) {
                 writeBalanceLog(mBalance);
             }
+            updateView();
         }
+    }
 
+    private String getBalanceInfo() {
+        return String.format("%,.0f", mBalance.getTotalAsKrw());
+    }
+
+    private void showNotifyMsg(String msg) {
+        startForeground(1, mTradeNotification.showNotification(msg));
     }
 
     private void trade(ArrayList<TradeInfo> tradeList, TradeInfo.TradeType tradeType) throws Exception {
