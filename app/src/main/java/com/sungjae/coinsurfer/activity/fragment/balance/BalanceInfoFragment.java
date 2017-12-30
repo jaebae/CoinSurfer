@@ -1,10 +1,12 @@
 package com.sungjae.coinsurfer.activity.fragment.balance;
 
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.widget.ResourceCursorAdapter;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.sungjae.coinsurfer.R;
@@ -19,8 +22,13 @@ import com.sungjae.coinsurfer.activity.fragment.BaseFragment;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class BalanceInfoFragment extends BaseFragment {
+    private final static int BALANCE_LIST_LOADER_ID = 1;
+    private final static int BALANCE_GRAPH_LOADER_ID = 2;
 
     private Balance mBalance;
     private TradeModel mTradeModel;
@@ -37,7 +45,46 @@ public class BalanceInfoFragment extends BaseFragment {
     private ListView mBalanceListView;
     private BalanceListAdapter mBalanceListAdapter;
 
-    private GraphView mGraphView;
+    private BalanceGraphView mGraphView;
+    private LoaderManager.LoaderCallbacks<Cursor> mBalanceListLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String projection[] = new String[]{
+                    "STRFTIME ('%Y-%m-%d %H:%M', date / 1000, 'unixepoch', 'localtime') as strdate",
+                    "krw",
+                    "_id"
+            };
+
+            return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/balance"), projection, null, null, "_id desc");
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            mBalanceListAdapter.changeCursor(cursor);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            mBalanceListAdapter.changeCursor(null);
+        }
+    };
+    private LoaderManager.LoaderCallbacks<Cursor> mBalanceGraphLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/hour_balance"), null, null, null, null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse("content://coinsurfer/balance"));
+            mGraphView.setCursor(cursor);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
+    };
 
     @Nullable
     @Override
@@ -64,15 +111,90 @@ public class BalanceInfoFragment extends BaseFragment {
         mBalanceListAdapter = new BalanceListAdapter(getContext(), R.layout.balance_list_item_layout, null, 0);
         mBalanceListView = view.findViewById(R.id.balance_list);
         mBalanceListView.setAdapter(mBalanceListAdapter);
-        addCursorLoader(5, null, createLoader());
 
-        graphTest();
+        getLoaderManager().initLoader(BALANCE_LIST_LOADER_ID, null, mBalanceListLoader);
+        getLoaderManager().initLoader(BALANCE_GRAPH_LOADER_ID, null, mBalanceGraphLoader);
+
+        //graphTest();
     }
 
     void graphTest() {
         GraphView graph = mGraphView;
 
-        // first series is a line
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+
+        calendar.add(Calendar.DATE, 1);
+        Date d4 = calendar.getTime();
+
+        calendar.add(Calendar.DATE, 1);
+        Date d5 = calendar.getTime();
+
+        calendar.add(Calendar.DATE, 1);
+        Date d6 = calendar.getTime();
+
+
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+                new DataPoint(d1, 1),
+                new DataPoint(d2, 5),
+                new DataPoint(d3, 1),
+                new DataPoint(d4, 5),
+                new DataPoint(d5, 1),
+                new DataPoint(d6, 6),
+        });
+
+        graph.addSeries(series);
+
+// set date label formatter
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(6); // only 4 because of the space
+
+// set manual x bounds to have nice steps
+        graph.getViewport().setMinX(d1.getTime());
+        graph.getViewport().setMaxX(d3.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setScrollable(true);
+
+// as we use dates as labels, the human rounding to nice readable numbers
+// is not necessary
+        graph.getGridLabelRenderer().setHumanRounding(false);
+
+
+        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 2),
+                new DataPoint(1, 3),
+                new DataPoint(2, 4),
+                new DataPoint(3, 5),
+                new DataPoint(4, 1)
+        });
+
+        series.setTitle("Random Curve 1");
+        series.setColor(Color.GREEN);
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+
+        graph.addSeries(series);
+        graph.addSeries(series2);*/
+
+
+        /*// first series is a line
         DataPoint[] points = new DataPoint[100];
         for (int i = 0; i < points.length; i++) {
             points[i] = new DataPoint(i, Math.sin(i * 0.5) * 20 * (Math.random() * 10 + 1));
@@ -92,7 +214,7 @@ public class BalanceInfoFragment extends BaseFragment {
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
 
-        graph.addSeries(series);
+        graph.addSeries(series);*/
 
         /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
                 new DataPoint(0, 1),
@@ -128,11 +250,6 @@ public class BalanceInfoFragment extends BaseFragment {
     }
 
     @Override
-    protected ResourceCursorAdapter getAdapterById(int id) {
-        return mBalanceListAdapter;
-    }
-
-    @Override
     protected void updateView() {
         double totalKrw = mBalance.getTotalAsKrw();
         double curKrw = mBalance.getKrw();
@@ -146,16 +263,5 @@ public class BalanceInfoFragment extends BaseFragment {
         mTargetCoinKrwView.setText("기준값 : " + String.format("%,.0f", mTradeModel.getTargetCoinAsKrw()));
 
         mCoinListAdapter.notifyDataSetChanged();
-    }
-
-
-    private CursorLoader createLoader() {
-        String projection[] = new String[]{
-                "STRFTIME ('%Y-%m-%d %H:%M', date / 1000, 'unixepoch', 'localtime') as strdate",
-                "krw",
-                "_id"
-        };
-
-        return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/balance"), projection, null, null, "_id desc");
     }
 }

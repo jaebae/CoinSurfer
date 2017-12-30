@@ -96,9 +96,7 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         } catch (Exception e) {
             showNotifyMsg(e.getMessage());
         } finally {
-            if (mBalance.getKrw() > 0) {
-                writeBalanceLog(mBalance);
-            }
+            writeBalanceLog(mBalance);
             updateView();
         }
     }
@@ -121,7 +119,12 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
     }
 
     private void writeBalanceLog(Balance balance) {
+        if (mBalance.getKrw() <= 0) {
+            return;
+        }
+
         long curTime = System.currentTimeMillis();
+
         if (curTime - mLastBalanceLogTime > BALANCE_LOG_INTERVAL) {
             mLastBalanceLogTime = curTime;
 

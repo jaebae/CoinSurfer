@@ -88,7 +88,7 @@
 
     <View style="@style/Divider" />
 
-    <com.jjoe64.graphview.GraphView
+    <com.sungjae.coinsurfer.activity.fragment.balance.BalanceGraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="200dp" />

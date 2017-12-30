@@ -90,6 +90,8 @@ public class TradeProvider extends ContentProvider {
 
             db.execSQL(getCreateTradeTableQuery());
             db.execSQL(getCreateBalanceTableQuery());
+
+            db.execSQL(getCreateHourBalanceViewQuery());
         }
 
         @Override
@@ -114,6 +116,17 @@ public class TradeProvider extends ContentProvider {
                     " date long, " +
                     " krw double ) ";
         }
+
+        private String getCreateHourBalanceViewQuery() {
+            return "create view HOUR_BALANCE as " +
+                    "SELECT _id, STRFTIME ('%H', date / 1000, 'unixepoch', 'localtime') as hour, avg(krw), STRFTIME ('%Y-%m-%d %H', date / 1000, 'unixepoch', 'localtime') as order_key " +
+                    "FROM BALANCE " +
+                    "group by order_key " +
+                    "order by _id desc " +
+                    "limit 0, 48 ";
+
+        }
+
 
         private String getDropTradeTableQuery() {
             return "DROP TABLE IF EXISTS TRADE";
