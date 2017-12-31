@@ -91,6 +91,7 @@ public class TradeProvider extends ContentProvider {
             db.execSQL(getCreateTradeTableQuery());
             db.execSQL(getCreateBalanceTableQuery());
 
+            db.execSQL(getCreateBalanceTotalViewQuery());
             db.execSQL(getCreateHourBalanceViewQuery());
         }
 
@@ -114,16 +115,27 @@ public class TradeProvider extends ContentProvider {
             return "CREATE TABLE IF NOT EXISTS BALANCE " +
                     "( _id integer PRIMARY KEY, " +
                     " date long, " +
+                    " coin int, " +
+                    " price double, " +
+                    " amount double, " +
                     " krw double ) ";
         }
 
+        private String getCreateBalanceTotalViewQuery() {
+            return "create view BALANCE_TOTAL as " +
+                    "SELECT _id, date, sum(krw) as total_krw " +
+                    "FROM BALANCE " +
+                    "group by date " +
+                    "order by date desc ";
+        }
+
+
         private String getCreateHourBalanceViewQuery() {
             return "create view HOUR_BALANCE as " +
-                    "SELECT _id, STRFTIME ('%H', date / 1000, 'unixepoch', 'localtime') as hour, avg(krw), STRFTIME ('%Y-%m-%d %H', date / 1000, 'unixepoch', 'localtime') as order_key " +
-                    "FROM BALANCE " +
+                    "SELECT _id, STRFTIME ('%H', date / 1000, 'unixepoch', 'localtime') as hour, avg(total_krw) as krw, STRFTIME ('%Y-%m-%d %H', date / 1000, 'unixepoch', 'localtime') as order_key " +
+                    "FROM BALANCE_TOTAL " +
                     "group by order_key " +
-                    "order by _id desc " +
-                    "limit 0, 48 ";
+                    "order by _id desc ";
 
         }
 

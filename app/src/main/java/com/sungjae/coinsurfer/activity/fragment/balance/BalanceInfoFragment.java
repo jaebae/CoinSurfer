@@ -1,5 +1,6 @@
 package com.sungjae.coinsurfer.activity.fragment.balance;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -20,6 +23,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.sungjae.coinsurfer.R;
 import com.sungjae.coinsurfer.activity.fragment.BaseFragment;
 import com.sungjae.coinsurfer.tradedata.Balance;
+import com.sungjae.coinsurfer.tradedata.Coin;
+import com.sungjae.coinsurfer.tradedata.CoinType;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
 
 import java.util.Calendar;
@@ -44,18 +49,40 @@ public class BalanceInfoFragment extends BaseFragment {
 
     private ListView mBalanceListView;
     private BalanceListAdapter mBalanceListAdapter;
+    AdapterView.OnItemLongClickListener mBalanceListViewOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
 
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            Cursor cursor = mBalanceListAdapter.getCursor();
+            cursor.moveToPosition(position);
+            long dateKey = cursor.getLong(3);
+            double oldTotalKrw = cursor.getDouble(1);
+
+            String msg = considerValue(dateKey, mBalance, oldTotalKrw);
+
+            Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+
+            return false;
+        }
+
+        private long getBalanceLogDateKey(int position) {
+            Cursor cursor = mBalanceListAdapter.getCursor();
+            cursor.moveToPosition(position);
+            return cursor.getLong(3);
+        }
+    };
     private BalanceGraphView mGraphView;
     private LoaderManager.LoaderCallbacks<Cursor> mBalanceListLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String projection[] = new String[]{
                     "STRFTIME ('%Y-%m-%d %H:%M', date / 1000, 'unixepoch', 'localtime') as strdate",
-                    "krw",
-                    "_id"
+                    "total_krw",
+                    "_id",
+                    "date"
             };
 
-            return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/balance"), projection, null, null, "_id desc");
+            return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/balance_total"), projection, null, null, "_id desc");
         }
 
         @Override
@@ -76,7 +103,7 @@ public class BalanceInfoFragment extends BaseFragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse("content://coinsurfer/balance"));
+            cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse("content://coinsurfer/balance_total"));
             mGraphView.setCursor(cursor);
         }
 
@@ -111,11 +138,49 @@ public class BalanceInfoFragment extends BaseFragment {
         mBalanceListAdapter = new BalanceListAdapter(getContext(), R.layout.balance_list_item_layout, null, 0);
         mBalanceListView = view.findViewById(R.id.balance_list);
         mBalanceListView.setAdapter(mBalanceListAdapter);
+        mBalanceListView.setOnItemLongClickListener(mBalanceListViewOnItemLongClickListener);
 
         getLoaderManager().initLoader(BALANCE_LIST_LOADER_ID, null, mBalanceListLoader);
         getLoaderManager().initLoader(BALANCE_GRAPH_LOADER_ID, null, mBalanceGraphLoader);
 
         //graphTest();
+    }
+
+    private String considerValue(long dateKey, Balance mBalance, double oldTotalKrw) {
+        ContentResolver cr = getContext().getContentResolver();
+        Uri uri = Uri.parse("content://coinsurfer/balance");
+        Cursor cursor = cr.query(uri, null, "date=" + dateKey, null, null);
+        double curAmount_oldPrice = 0;
+        double oldAmount_curPrice = 0;
+        if (cursor.moveToFirst()) {
+            curAmount_oldPrice += mBalance.getKrw();
+
+            do {
+                int coinTypeIndex = cursor.getInt(2);
+
+                if (coinTypeIndex < 0) {
+                    oldAmount_curPrice += cursor.getDouble(4);//KRW
+                } else {
+                    CoinType coinType = CoinType.getCoinType(coinTypeIndex);
+                    double coinPrice = cursor.getDouble(3);
+                    double coinAmount = cursor.getDouble(4);
+
+                    int balanceIndex = mBalance.getIndex(coinType);
+                    Coin curCoin = null;
+                    if (balanceIndex >= 0) {
+                        curCoin = mBalance.getCoin(balanceIndex);
+                        curAmount_oldPrice += coinPrice * curCoin.getCoinValue();
+                        oldAmount_curPrice += coinAmount * curCoin.getCurPrice();
+                    }
+                }
+            } while (cursor.moveToNext());
+
+        }
+        String ret = String.format("Delta = %,.0f\n%,.0f",
+                curAmount_oldPrice - oldTotalKrw,
+                mBalance.getTotalAsKrw() - oldAmount_curPrice
+        );
+        return ret;
     }
 
     void graphTest() {

@@ -128,15 +128,44 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
         if (curTime - mLastBalanceLogTime > BALANCE_LOG_INTERVAL) {
             mLastBalanceLogTime = curTime;
 
+            ContentResolver cr = getContentResolver();
+
+            writeKrwLog(cr, curTime, balance);
+            writeCoinLog(cr, curTime, balance);
+
+            Uri uri = Uri.parse("content://coinsurfer/balance_total");
+            cr.notifyChange(uri, null);
+        }
+    }
+
+    private void writeCoinLog(ContentResolver cr, long curTime, Balance balance) {
+        int cnt = balance.getCoinCount();
+        for (int i = 0; i < cnt; i++) {
+            Coin coin = balance.getCoin(i);
             Uri uri = Uri.parse("content://coinsurfer/balance");
             ContentValues contentValue = new ContentValues();
 
             contentValue.put("date", curTime);
-            contentValue.put("krw", balance.getTotalAsKrw());
+            contentValue.put("coin", coin.getCoinType().ordinal());
+            contentValue.put("price", coin.getCurPrice());
+            contentValue.put("amount", coin.getCoinValue());
+            contentValue.put("krw", coin.getCurKrw());
 
-            ContentResolver cr = getContentResolver();
             Uri result = cr.insert(uri, contentValue);
         }
+    }
+
+    private void writeKrwLog(ContentResolver cr, long curTime, Balance balance) {
+        Uri uri = Uri.parse("content://coinsurfer/balance");
+        ContentValues contentValue = new ContentValues();
+
+        contentValue.put("date", curTime);
+        contentValue.put("coin", "-1");
+        contentValue.put("price", 1);
+        contentValue.put("amount", balance.getKrw());
+        contentValue.put("krw", balance.getKrw());
+
+        Uri result = cr.insert(uri, contentValue);
     }
 
     private void writeTradeLog(TradeInfo tradeResult) {
@@ -151,7 +180,6 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
         ContentResolver cr = getContentResolver();
         Uri result = cr.insert(uri, contentValue);
-        cr.notifyChange(uri, null);
     }
 
     @NonNull

@@ -25,5 +25,4 @@ public class BalanceListAdapter extends ResourceCursorAdapter {
         krwView.setText(String.format("%,.0f", cursor.getDouble(1)));
     }
 
-
 }

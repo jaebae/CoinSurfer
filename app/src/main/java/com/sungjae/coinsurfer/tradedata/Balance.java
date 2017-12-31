@@ -36,7 +36,7 @@ public class Balance {
 
 
     public synchronized void updateCoin(@NonNull Coin coin) {
-        int index = getIndex(coin);
+        int index = getIndex(coin.getCoinType());
         if (index >= 0) {
             mCoinList.remove(index);
             mCoinList.add(index, coin);
@@ -45,10 +45,10 @@ public class Balance {
         }
     }
 
-    private int getIndex(@NonNull Coin coin) {
+    public int getIndex(@NonNull CoinType coinType) {
         for (int i = 0; i < mCoinList.size(); i++) {
             Coin pre = mCoinList.get(i);
-            if (pre.getCoinName().equals(coin.getCoinName())) {
+            if (pre.getCoinType().equals(coinType)) {
                 return i;
             }
         }
