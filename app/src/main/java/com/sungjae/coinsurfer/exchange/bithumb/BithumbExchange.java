@@ -81,8 +81,6 @@ public class BithumbExchange implements Exchange {
         }
 
         String data = callApi(apiName, null, param);
-        System.out.println(data);
-
         return getTradeResult(data, tradeInfo);
     }
 

@@ -16,19 +16,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.sungjae.coinsurfer.R;
 import com.sungjae.coinsurfer.activity.fragment.BaseFragment;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
 import com.sungjae.coinsurfer.tradedata.CoinType;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
-
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class BalanceInfoFragment extends BaseFragment {
@@ -104,7 +97,7 @@ public class BalanceInfoFragment extends BaseFragment {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
             cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse("content://coinsurfer/balance_total"));
-            mGraphView.setCursor(cursor);
+            mGraphView.setCursor(cursor, mBalance.getTotalAsKrw());
         }
 
         @Override
@@ -142,8 +135,6 @@ public class BalanceInfoFragment extends BaseFragment {
 
         getLoaderManager().initLoader(BALANCE_LIST_LOADER_ID, null, mBalanceListLoader);
         getLoaderManager().initLoader(BALANCE_GRAPH_LOADER_ID, null, mBalanceGraphLoader);
-
-        //graphTest();
     }
 
     private String considerValue(long dateKey, Balance mBalance, double oldTotalKrw) {
@@ -183,129 +174,6 @@ public class BalanceInfoFragment extends BaseFragment {
         return ret;
     }
 
-    void graphTest() {
-        GraphView graph = mGraphView;
-
-        // generate Dates
-        Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
-
-        calendar.add(Calendar.DATE, 1);
-        Date d4 = calendar.getTime();
-
-        calendar.add(Calendar.DATE, 1);
-        Date d5 = calendar.getTime();
-
-        calendar.add(Calendar.DATE, 1);
-        Date d6 = calendar.getTime();
-
-
-// you can directly pass Date objects to DataPoint-Constructor
-// this will convert the Date to double via Date#getTime()
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(d1, 1),
-                new DataPoint(d2, 5),
-                new DataPoint(d3, 1),
-                new DataPoint(d4, 5),
-                new DataPoint(d5, 1),
-                new DataPoint(d6, 6),
-        });
-
-        graph.addSeries(series);
-
-// set date label formatter
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(6); // only 4 because of the space
-
-// set manual x bounds to have nice steps
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d3.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setScrollable(true);
-
-// as we use dates as labels, the human rounding to nice readable numbers
-// is not necessary
-        graph.getGridLabelRenderer().setHumanRounding(false);
-
-
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 2),
-                new DataPoint(1, 3),
-                new DataPoint(2, 4),
-                new DataPoint(3, 5),
-                new DataPoint(4, 1)
-        });
-
-        series.setTitle("Random Curve 1");
-        series.setColor(Color.GREEN);
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-        series.setThickness(8);
-
-
-        graph.addSeries(series);
-        graph.addSeries(series2);*/
-
-
-        /*// first series is a line
-        DataPoint[] points = new DataPoint[100];
-        for (int i = 0; i < points.length; i++) {
-            points[i] = new DataPoint(i, Math.sin(i * 0.5) * 20 * (Math.random() * 10 + 1));
-        }
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
-
-        // set manual X bounds
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(-150);
-        graph.getViewport().setMaxY(150);
-
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(4);
-        graph.getViewport().setMaxX(80);
-
-        // enable scaling and scrolling
-        graph.getViewport().setScalable(true);
-        graph.getViewport().setScalableY(true);
-
-        graph.addSeries(series);*/
-
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 60)
-        });
-        graph.addSeries(series);
-
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 30),
-                new DataPoint(1, 30),
-                new DataPoint(2, 60),
-                new DataPoint(3, 20),
-                new DataPoint(4, 50)
-        });
-
-// set second scale
-        graph.getSecondScale().addSeries(series2);
-// the y bounds are always manual for second scale
-        graph.getSecondScale().setMinY(0);
-        graph.getSecondScale().setMaxY(100);
-        series2.setColor(Color.RED);
-        graph.getGridLabelRenderer().setVerticalLabelsSecondScaleColor(Color.RED);*/
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

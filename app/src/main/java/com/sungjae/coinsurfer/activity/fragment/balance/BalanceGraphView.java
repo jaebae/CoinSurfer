@@ -2,6 +2,7 @@ package com.sungjae.coinsurfer.activity.fragment.balance;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 
@@ -22,18 +23,34 @@ public class BalanceGraphView extends GraphView {
         super(context, attrs, defStyle);
     }
 
-    public void setCursor(Cursor cursor) {
+    public void setCursor(Cursor cursor, double curTotalKrw) {
         DataPoint[] dataList = getDataPoints(cursor);
+        DataPoint[] dataCurList = getCurDataPoints(curTotalKrw, dataList.length);
 
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataList);
+        series.setDataPointsRadius(10);
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(dataCurList);
+        series2.setColor(Color.RED);
         removeAllSeries();
         addSeries(series);
+        addSeries(series2);
+
 
         getViewport().setXAxisBoundsManual(true);
         getViewport().setMinX(0);
         getViewport().setMaxX(cursor.getCount());
         getGridLabelRenderer().setNumHorizontalLabels(0);
+    }
+
+    private DataPoint[] getCurDataPoints(double curTotalKrw, int length) {
+        DataPoint[] dataList = new DataPoint[length];
+
+        for (int i = 0; i < length; i++) {
+            DataPoint data = new DataPoint(i, curTotalKrw / 1000);
+            dataList[i] = data;
+        }
+        return dataList;
     }
 
     @NonNull
