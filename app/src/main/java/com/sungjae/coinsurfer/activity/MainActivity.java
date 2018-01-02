@@ -7,8 +7,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.crashlytics.android.Crashlytics;
 import com.sungjae.coinsurfer.R;
 import com.sungjae.coinsurfer.service.TradeService;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mPager;
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         setTabLayout();

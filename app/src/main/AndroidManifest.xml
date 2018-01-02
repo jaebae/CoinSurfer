@@ -30,6 +30,10 @@
             android:name=".provider.TradeProvider"
             android:authorities="coinsurfer"
             android:exported="false" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a4b0594464aaff3ffb0ff737b8b39fd60bc6b5eb" />
     </application>
 
 </manifest>
