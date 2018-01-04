@@ -16,7 +16,7 @@ public class TradeModelTest {
 
     @Before
     public void setUp() throws Exception {
-        mTradeModel = new TradeModel();
+        mTradeModel = TradeModel.getInstance();
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TradeModelTest {
         }
 
         mTradeModel.setCoinRate(0.8);
-        mTradeModel.setTriggerRate(2.);
+        mTradeModel.setTriggerRate(99);
 
         ArrayList<TradeInfo> tradeInfoList = mTradeModel.getTradeInfoList();
         assertThat(tradeInfoList.size(), is(4));
@@ -52,6 +52,8 @@ public class TradeModelTest {
         Coin coin = createCoin(0, 95., 95.);
         coin.setCoinValue(40.);
         balance.updateCoin(coin);
+
+        mTradeModel.setTriggerRate(3);
 
         tradeInfoList = mTradeModel.getTradeInfoList();
 

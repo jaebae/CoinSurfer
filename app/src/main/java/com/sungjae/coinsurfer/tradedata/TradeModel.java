@@ -13,6 +13,8 @@ public class TradeModel {
 
     private static TradeModel sInstance;
 
+    private boolean mTradeCancelled = false;
+
     public static synchronized TradeModel getInstance() {
         if (sInstance == null) {
             sInstance = new TradeModel();
@@ -34,7 +36,7 @@ public class TradeModel {
         mTriggerRate = triggerRate;
     }
 
-    public ArrayList<TradeInfo> getTradeInfoList() {
+    public ArrayList<TradeInfo> getTradeInfoList() throws Exception{
         ArrayList<TradeInfo> tradeInfoList = new ArrayList<>();
 
         double targetCoin = getTargetCoinAsKrw();
@@ -62,26 +64,39 @@ public class TradeModel {
         return (totalAsKrw * mCoinRate) / mBalance.getCoinCount();
     }
 
-    private TradeInfo createBuyTradeInfo(Coin coin, double targetCoin) {
+    private TradeInfo createBuyTradeInfo(Coin coin, double targetCoin) throws Exception {
         double diff = targetCoin - coin.getSellKrw();
         double rate = (diff / targetCoin) * 100.f;
 
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
 
         if (rate > mTriggerRate) {
+            checkAbnormalCase(rate);
             tradeInfo.setTradeType(TradeInfo.TradeType.BUY);
             tradeInfo.setTradeCoinAmount(coin.getSellCoin(diff));
+            mTradeCancelled = false;
         }
         return tradeInfo;
     }
 
-    private TradeInfo createSellTradeInfo(Coin coin, double targetCoin) {
+    private void checkAbnormalCase(double rate) throws Exception {
+        if (rate > mTriggerRate * 2) {
+            if (!mTradeCancelled) {
+                mTradeCancelled = true;
+                throw new TooBigDiffRateException("TOO BIG DIFF RATE");
+            }
+        }
+    }
+
+    private TradeInfo createSellTradeInfo(Coin coin, double targetCoin) throws Exception {
         double diff = coin.getBuyKrw() - targetCoin;
         double rate = (diff / targetCoin) * 100.f;
         TradeInfo tradeInfo = new TradeInfo(coin.getCoinType());
         if (rate > mTriggerRate) {
+            checkAbnormalCase(rate);
             tradeInfo.setTradeType(TradeInfo.TradeType.SELL);
             tradeInfo.setTradeCoinAmount(coin.getBuyCoin(diff));
+            mTradeCancelled = false;
         }
         return tradeInfo;
     }

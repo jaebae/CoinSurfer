@@ -21,6 +21,7 @@ import com.sungjae.coinsurfer.setting.TradeSetting;
 import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
 import com.sungjae.coinsurfer.tradedata.CoinType;
+import com.sungjae.coinsurfer.tradedata.TooBigDiffRateException;
 import com.sungjae.coinsurfer.tradedata.TradeInfo;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
 
@@ -31,7 +32,7 @@ import static com.sungjae.coinsurfer.tradedata.TradeInfo.TradeType.SELL;
 
 public class TradeService extends Service implements TradeSetting.OnSettingChangeListener {
 
-    private final long BALANCE_LOG_INTERVAL = 1000 * 60L;
+    private final long BALANCE_LOG_INTERVAL = 1000L * 60L * 5L;
     private Handler mHandler;
     private TradeSetting mTradeSetting;
     private Exchange mExchange;
@@ -89,10 +90,13 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
                 if (!tradeList.isEmpty()) {
                     trade(tradeList, SELL); //sell should do first to get KRW for Buy
                     trade(tradeList, BUY);
+                    mLastBalanceLogTime = 0L;
                 }
 
                 showNotifyMsg(getBalanceInfo());
             }
+        } catch (TooBigDiffRateException e) {
+            showNotifyMsg(e.getMessage());
         } catch (Exception e) {
             showNotifyMsg(e.getMessage());
         } finally {

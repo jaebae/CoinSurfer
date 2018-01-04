@@ -20,6 +20,7 @@ public class BalanceTest {
     @Before
     public void setUp() throws Exception {
         mBalance = Balance.getsInstance();
+        mBalance.clearCoinInfo();
     }
 
     @Test
