@@ -10,12 +10,22 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BithumbExchange implements Exchange {
+    private final static int MAX_STORE_SIZE = 8;
+    ArrayList<String> mReceivedData = new ArrayList<>();
     private Api_Client mApi = new Api_Client();
 
     public BithumbExchange() {
+    }
+
+    private void storeReceivedData(String data) {
+        mReceivedData.add(data);
+        if (mReceivedData.size() > MAX_STORE_SIZE) {
+            mReceivedData.remove(0);
+        }
     }
 
     @Override
@@ -69,6 +79,11 @@ public class BithumbExchange implements Exchange {
     }
 
     @Override
+    public ArrayList<String> getLastReceivedData() {
+        return mReceivedData;
+    }
+
+    @Override
     public TradeInfo trade(TradeInfo tradeInfo) throws Exception {
         HashMap<String, String> param = new HashMap<>();
 
@@ -112,7 +127,9 @@ public class BithumbExchange implements Exchange {
             api += urlParam;
         }
 
-        return mApi.callApi(api, param);
+        String data = mApi.callApi(api, param);
+        storeReceivedData(data);
+        return data;
     }
 
     private JSONArray getArrayValueObj(String json) {

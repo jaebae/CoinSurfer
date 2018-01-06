@@ -20,11 +20,10 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
     private ArrayList<CoinType> mEnableCoinList = new ArrayList<>();
     private long mPollingTime;
 
-    private ArrayList<OnSettingChangeListener> mOnSettingChangeListener = new ArrayList<>();
+    private int mDayGraphLimit;
+    private int mHourGraphLimit;
 
-    public interface OnSettingChangeListener {
-        void onSettingChange();
-    }
+    private ArrayList<OnSettingChangeListener> mOnSettingChangeListener = new ArrayList<>();
 
     private TradeSetting(Context context) {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -73,6 +72,7 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
         updateConnection();
         updateInvestInfo();
         updateEnableCoinList();
+        updateGraphSetting();
     }
 
     private void updateEnableCoinList() {
@@ -94,6 +94,11 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
         mSecretKey = mSharedPreferences.getString("secret_key", "");
     }
 
+    private void updateGraphSetting() {
+        mHourGraphLimit = getIngValue("hour_view", 24);
+        mDayGraphLimit = getIngValue("day_view", 0);
+    }
+
     private void updateInvestInfo() {
         mCoinRate = getDoubleValue("coin_rate", 0.8);
         mTriggerRate = getDoubleValue("trigger_rate", 2);
@@ -113,6 +118,11 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
         return Long.parseLong(value);
     }
 
+    private int getIngValue(String key, long defaultValue) {
+        String value = mSharedPreferences.getString(key, "" + defaultValue);
+        return Integer.parseInt(value);
+    }
+
     public String getConnectKey() {
         return mConnectKey;
     }
@@ -127,5 +137,17 @@ public class TradeSetting implements SharedPreferences.OnSharedPreferenceChangeL
 
     public double getTriggerRate() {
         return mTriggerRate;
+    }
+
+    public int getDayGraphLimit() {
+        return mDayGraphLimit;
+    }
+
+    public int getHourGraphLimit() {
+        return mHourGraphLimit;
+    }
+
+    public interface OnSettingChangeListener {
+        void onSettingChange();
     }
 }

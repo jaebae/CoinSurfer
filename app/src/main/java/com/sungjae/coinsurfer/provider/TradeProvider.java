@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 
 public class TradeProvider extends ContentProvider {
     private static final String DATABASE_NAME = "coinsurfer.db";
-    private static final int DATABASE_VERSION = 100;
+    private static final int DATABASE_VERSION = 101;
 
     private SQLiteDatabase mDatabase;
 
@@ -90,14 +90,22 @@ public class TradeProvider extends ContentProvider {
 
             db.execSQL(getCreateTradeTableQuery());
             db.execSQL(getCreateBalanceTableQuery());
+            db.execSQL(getCreateErrLogTableQuery());
 
             db.execSQL(getCreateBalanceTotalViewQuery());
             db.execSQL(getCreateHourBalanceViewQuery());
+            db.execSQL(getCreateDayBalanceViewQuery());
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        }
+
+        private String getCreateErrLogTableQuery() {
+            return "CREATE TABLE IF NOT EXISTS ERR_LOG " +
+                    "( _id integer PRIMARY KEY, " +
+                    " log string)";
         }
 
         private String getCreateTradeTableQuery() {
@@ -133,6 +141,14 @@ public class TradeProvider extends ContentProvider {
         private String getCreateHourBalanceViewQuery() {
             return "create view HOUR_BALANCE as " +
                     "SELECT _id, STRFTIME ('%H', date / 1000, 'unixepoch', 'localtime') as hour, avg(total_krw) as krw, STRFTIME ('%Y-%m-%d %H', date / 1000, 'unixepoch', 'localtime') as order_key " +
+                    "FROM BALANCE_TOTAL " +
+                    "group by order_key " +
+                    "order by _id desc ";
+        }
+
+        private String getCreateDayBalanceViewQuery() {
+            return "create view DAY_BALANCE as " +
+                    "SELECT _id, STRFTIME ('%d', date / 1000, 'unixepoch', 'localtime') as hour, avg(total_krw) as krw, STRFTIME ('%Y-%m-%d', date / 1000, 'unixepoch', 'localtime') as order_key " +
                     "FROM BALANCE_TOTAL " +
                     "group by order_key " +
                     "order by _id desc ";

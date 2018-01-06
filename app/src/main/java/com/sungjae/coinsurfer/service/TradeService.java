@@ -97,12 +97,26 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
             }
         } catch (TooBigDiffRateException e) {
             showNotifyMsg(e.getMessage());
+            ArrayList<String> msgList = mExchange.getLastReceivedData();
+            for (String msg : msgList) {
+                writeErrLog(msg);
+            }
         } catch (Exception e) {
             showNotifyMsg(e.getMessage());
         } finally {
             writeBalanceLog(mBalance);
             updateView();
         }
+    }
+
+    private void writeErrLog(String msg) {
+        ContentResolver cr = getContentResolver();
+
+        Uri uri = Uri.parse("content://coinsurfer/err_log");
+        ContentValues contentValue = new ContentValues();
+
+        contentValue.put("log", msg);
+        Uri result = cr.insert(uri, contentValue);
     }
 
     private String getBalanceInfo() {

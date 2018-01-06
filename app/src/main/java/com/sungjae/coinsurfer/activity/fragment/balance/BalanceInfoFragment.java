@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,9 @@ import com.sungjae.coinsurfer.tradedata.Balance;
 import com.sungjae.coinsurfer.tradedata.Coin;
 import com.sungjae.coinsurfer.tradedata.CoinType;
 import com.sungjae.coinsurfer.tradedata.TradeModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BalanceInfoFragment extends BaseFragment {
@@ -36,6 +41,9 @@ public class BalanceInfoFragment extends BaseFragment {
     private TextView mCurKrwView;
     private TextView mInvestedKrwView;
     private TextView mTargetCoinKrwView;
+
+    private BalanceGraphView mGraphView;
+    private Spinner mFilterSpinner;
 
     private ListView mCoinListView;
     private CoinInfoAdapter mCoinListAdapter;
@@ -64,7 +72,7 @@ public class BalanceInfoFragment extends BaseFragment {
             return cursor.getLong(3);
         }
     };
-    private BalanceGraphView mGraphView;
+
     private LoaderManager.LoaderCallbacks<Cursor> mBalanceListLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -91,7 +99,22 @@ public class BalanceInfoFragment extends BaseFragment {
     private LoaderManager.LoaderCallbacks<Cursor> mBalanceGraphLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            return new CursorLoader(getContext(), Uri.parse("content://coinsurfer/hour_balance"), null, null, null, null);
+            CursorLoader loader = null;
+            if (mFilterSpinner.getSelectedItemPosition() == 0) {
+                int limit = mTradeSetting.getHourGraphLimit();
+                loader = new CursorLoader(getContext(), Uri.parse("content://coinsurfer/hour_balance"), null, null, null, getLimitQuery(limit));
+            } else {
+                int limit = mTradeSetting.getDayGraphLimit();
+                loader = new CursorLoader(getContext(), Uri.parse("content://coinsurfer/day_balance"), null, null, null, getLimitQuery(limit));
+            }
+            return loader;
+        }
+
+        private String getLimitQuery(int limit) {
+            if (limit > 0) {
+                return "_id desc limit 0, " + limit;
+            }
+            return null;
         }
 
         @Override
@@ -122,7 +145,9 @@ public class BalanceInfoFragment extends BaseFragment {
         mInvestedKrwView = view.findViewById(R.id.invested_krw);
         mTargetCoinKrwView = view.findViewById(R.id.target_coin_krw);
 
+
         mGraphView = view.findViewById(R.id.graph);
+        createSpinner(view);
 
         mCoinListView = view.findViewById(R.id.coin_list);
         mCoinListAdapter = new CoinInfoAdapter(this.getContext(), mBalance.getCoinList());
@@ -135,6 +160,34 @@ public class BalanceInfoFragment extends BaseFragment {
 
         getLoaderManager().initLoader(BALANCE_LIST_LOADER_ID, null, mBalanceListLoader);
         getLoaderManager().initLoader(BALANCE_GRAPH_LOADER_ID, null, mBalanceGraphLoader);
+    }
+
+    private void createSpinner(View view) {
+        mFilterSpinner = view.findViewById(R.id.filterSpinner);
+        mFilterSpinner.setAdapter(getSpinner_adapter());
+        mFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                getLoaderManager().restartLoader(BALANCE_GRAPH_LOADER_ID, null, mBalanceGraphLoader);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private ArrayAdapter<String> getSpinner_adapter() {
+        List<String> spinner_items = new ArrayList<>();
+
+        spinner_items.add("시간");
+        spinner_items.add("일자");
+
+        ArrayAdapter<String> spinner_adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, spinner_items);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return spinner_adapter;
     }
 
     private String considerValue(long dateKey, Balance mBalance, double oldTotalKrw) {

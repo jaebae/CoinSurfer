@@ -26,6 +26,32 @@
             android:key="polling_time"
             android:title="POLLING INTERVAL" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Graph">
+        <EditTextPreference
+            android:defaultValue="24"
+            android:editable="true"
+            android:inputType="numberDecimal"
+            android:key="hour_view"
+            android:title="HOUR RANGE" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:editable="true"
+            android:inputType="numberDecimal"
+            android:key="day_view"
+            android:title="DAY RANGE" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Connection">
+        <EditTextPreference
+            android:editable="true"
+            android:inputType="textPassword"
+            android:key="connect_key"
+            android:title="Connect Key" />
+        <EditTextPreference
+            android:editable="true"
+            android:inputType="textPassword"
+            android:key="secret_key"
+            android:title="Secret Key" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="Support Coin">
         <SwitchPreferenceCompat
             android:defaultValue="false"
@@ -75,17 +101,5 @@
             android:defaultValue="false"
             android:key="coin_11"
             android:title="EOS" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Connection">
-        <EditTextPreference
-            android:editable="true"
-            android:inputType="textPassword"
-            android:key="connect_key"
-            android:title="Connect Key" />
-        <EditTextPreference
-            android:editable="true"
-            android:inputType="textPassword"
-            android:key="secret_key"
-            android:title="Secret Key" />
     </PreferenceCategory>
 </PreferenceScreen>
