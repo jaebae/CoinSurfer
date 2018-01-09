@@ -74,4 +74,48 @@ public class Balance {
     public void setKrw(double krw) {
         mKrw = krw;
     }
+
+    public void updateSupportCoinType(ArrayList<CoinType> coinTypeList) {
+        removeUnSelectedCoin(coinTypeList);
+        addSelectedCoin(coinTypeList);
+    }
+
+    private void addSelectedCoin(ArrayList<CoinType> coinTypeList) {
+        ArrayList<Coin> addList = new ArrayList<>();
+        for (CoinType type : coinTypeList) {
+            boolean added = true;
+            for (Coin coin : mCoinList) {
+                if (coin.getCoinType() == type) {
+                    added = false;
+                    break;
+                }
+            }
+
+            if (added) {
+                addList.add(new Coin(type));
+            }
+        }
+        mCoinList.addAll(addList);
+    }
+
+    private void removeUnSelectedCoin(ArrayList<CoinType> coinTypeList) {
+        ArrayList<Coin> removeList = new ArrayList<Coin>();
+        for (Coin coin : mCoinList) {
+            boolean support = false;
+            for (CoinType type : coinTypeList) {
+                if (coin.getCoinType() == type) {
+                    support = true;
+                    break;
+                }
+            }
+            if (!support) {
+                removeList.add(coin);
+            }
+        }
+
+        for (Coin coin : removeList) {
+            mCoinList.remove(coin);
+        }
+    }
+
 }

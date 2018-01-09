@@ -221,17 +221,18 @@ public class TradeService extends Service implements TradeSetting.OnSettingChang
 
     private void applySettingValue() {
         synchronized (SETTING_LOCK) {
-            mBalance.clearCoinInfo();
-            ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
-            for (CoinType coinType : coinTypeList) {
-                mBalance.updateCoin(new Coin(coinType));
-            }
+            updateBalanceCoin();
 
             mTradeModel.setCoinRate(mTradeSetting.getCoinRate());
             mTradeModel.setTriggerRate(mTradeSetting.getTriggerRate());
 
             mExchange.setApiKey(mTradeSetting.getConnectKey(), mTradeSetting.getSecretKey());
         }
+    }
+
+    private void updateBalanceCoin() {
+        ArrayList<CoinType> coinTypeList = mTradeSetting.getEnableCoinList();
+        mBalance.updateSupportCoinType(coinTypeList);
     }
 
     private void updateView() {
