@@ -152,6 +152,8 @@ public class BalanceInfoFragment extends BaseFragment {
         mCoinListView = view.findViewById(R.id.coin_list);
         mCoinListAdapter = new CoinInfoAdapter(this.getContext(), mBalance.getCoinList());
         mCoinListView.setAdapter(mCoinListAdapter);
+        mCoinListView.setFastScrollEnabled(true);
+        //mCoinListView.setFastScrollStyle();
 
         mBalanceListAdapter = new BalanceListAdapter(getContext(), R.layout.balance_list_item_layout, null, 0);
         mBalanceListView = view.findViewById(R.id.balance_list);
@@ -196,6 +198,9 @@ public class BalanceInfoFragment extends BaseFragment {
         Cursor cursor = cr.query(uri, null, "date=" + dateKey, null, null);
         double curAmount_oldPrice = 0;
         double oldAmount_curPrice = 0;
+
+        String info = "";
+        ArrayList<CoinType> handledCoin = new ArrayList<>();
         if (cursor.moveToFirst()) {
             curAmount_oldPrice += mBalance.getKrw();
 
@@ -203,24 +208,52 @@ public class BalanceInfoFragment extends BaseFragment {
                 int coinTypeIndex = cursor.getInt(2);
 
                 if (coinTypeIndex < 0) {
+                    info += String.format("현금 : %.0f \n", cursor.getDouble(4));
                     oldAmount_curPrice += cursor.getDouble(4);//KRW
                 } else {
                     CoinType coinType = CoinType.getCoinType(coinTypeIndex);
+                    handledCoin.add(coinType);
+
                     double coinPrice = cursor.getDouble(3);
                     double coinAmount = cursor.getDouble(4);
 
+                    info += String.format("%s : %.3f x %.0f = %.0f\n", coinType.toString(), coinAmount, coinPrice, coinPrice * coinAmount);
                     int balanceIndex = mBalance.getIndex(coinType);
                     Coin curCoin = null;
                     if (balanceIndex >= 0) {
                         curCoin = mBalance.getCoin(balanceIndex);
                         curAmount_oldPrice += coinPrice * curCoin.getCoinValue();
                         oldAmount_curPrice += coinAmount * curCoin.getCurPrice();
+
+                        info += String.format("%s : %.3f x %.0f = %.0f\n", coinType.toString(), coinAmount, curCoin.getCurPrice(), curCoin.getCurPrice() * coinAmount);
+                        info += String.format("%s : %.3f x %.0f = %.0f\n", coinType.toString(), curCoin.getCoinValue(), coinPrice, coinPrice * curCoin.getCoinValue());
                     }
                 }
             } while (cursor.moveToNext());
 
+            ArrayList<Coin> coinList = (ArrayList<Coin>) mBalance.getCoinList().clone();
+            ArrayList<Coin> unHandledCoinList = new ArrayList<>();
+            for (Coin coin : coinList) {
+                boolean handled = false;
+                for (CoinType type : handledCoin) {
+                    if (coin.getCoinType() == type) {
+                        handled = true;
+                        break;
+                    }
+                }
+                if (!handled) {
+                    unHandledCoinList.add(coin);
+                }
+            }
+
+            for (Coin coin : unHandledCoinList) {
+                curAmount_oldPrice += coin.getCurKrw();
+            }
+
         }
-        String ret = String.format("Delta = %,.0f\n%,.0f",
+        String ret = info + String.format("curAmount_oldPrice = %,.0f\noldAmount_curPrice = %,.0f\nDelta = %,.0f\n%,.0f",
+                curAmount_oldPrice,
+                oldAmount_curPrice,
                 curAmount_oldPrice - oldTotalKrw,
                 mBalance.getTotalAsKrw() - oldAmount_curPrice
         );

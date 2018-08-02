@@ -114,6 +114,9 @@
     <ListView
         android:id="@+id/balance_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:scrollbarSize="50dip"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbarThumbVertical="@drawable/fastscroll_drawable" />
 
 </LinearLayout>

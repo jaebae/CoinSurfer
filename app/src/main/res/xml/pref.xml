@@ -101,5 +101,106 @@
             android:defaultValue="false"
             android:key="coin_11"
             android:title="EOS" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_12"
+            android:title="ICX" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_13"
+            android:title="VEN" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_14"
+            android:title="TRX" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_15"
+            android:title="ELF" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_16"
+            android:title="MITH" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_17"
+            android:title="MCO" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_18"
+            android:title="OMG" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_19"
+            android:title="KNC" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_20"
+            android:title="GNT" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_21"
+            android:title="HSR" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_22"
+            android:title="ZIL" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_23"
+            android:title="ETHOS" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_24"
+            android:title="PAY" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_25"
+            android:title="WAX" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_26"
+            android:title="POWR" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_27"
+            android:title="LRC" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_28"
+            android:title="GTO" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_29"
+            android:title="STEEM" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_30"
+            android:title="STRAT" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_31"
+            android:title="ZRX" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_32"
+            android:title="REP" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_33"
+            android:title="AE" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_34"
+            android:title="XEM" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_35"
+            android:title="SNT" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="coin_36"
+            android:title="ADA" />
+
     </PreferenceCategory>
 </PreferenceScreen>
